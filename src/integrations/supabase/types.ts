@@ -145,6 +145,101 @@ export type Database = {
         }
         Relationships: []
       }
+      routine_completions: {
+        Row: {
+          completed: boolean
+          completed_at: string | null
+          completion_date: string
+          created_at: string
+          id: string
+          skipped: boolean
+          template_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean
+          completed_at?: string | null
+          completion_date: string
+          created_at?: string
+          id?: string
+          skipped?: boolean
+          template_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean
+          completed_at?: string | null
+          completion_date?: string
+          created_at?: string
+          id?: string
+          skipped?: boolean
+          template_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "routine_completions_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "routine_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      routine_templates: {
+        Row: {
+          active: boolean
+          archived_at: string | null
+          category: string | null
+          created_at: string
+          description: string | null
+          effective_from: string
+          end_time: string | null
+          id: string
+          name: string
+          priority: Database["public"]["Enums"]["routine_priority"]
+          sort_order: number
+          start_time: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          archived_at?: string | null
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          effective_from?: string
+          end_time?: string | null
+          id?: string
+          name: string
+          priority?: Database["public"]["Enums"]["routine_priority"]
+          sort_order?: number
+          start_time?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          archived_at?: string | null
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          effective_from?: string
+          end_time?: string | null
+          id?: string
+          name?: string
+          priority?: Database["public"]["Enums"]["routine_priority"]
+          sort_order?: number
+          start_time?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       routines: {
         Row: {
           category: string | null

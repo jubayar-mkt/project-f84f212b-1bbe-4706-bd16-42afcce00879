@@ -7,45 +7,48 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toBn, toLocalDateStr } from "@/lib/bangla";
 
-interface Row {
-  scheduled_date: string;
-  completed: boolean;
-}
+interface Tpl { id: string; effective_from: string; }
+interface Comp { template_id: string; completion_date: string; completed: boolean; skipped: boolean; }
 
 export const RoutineAnalyticsPreview = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
-  const [rows, setRows] = useState<Row[]>([]);
+  const [templates, setTemplates] = useState<Tpl[]>([]);
+  const [comps, setComps] = useState<Comp[]>([]);
 
   useEffect(() => {
     if (!user) return;
     (async () => {
       const since = new Date();
       since.setDate(since.getDate() - 6);
-      const { data } = await supabase
-        .from("routines")
-        .select("scheduled_date,completed")
-        .gte("scheduled_date", toLocalDateStr(since));
-      setRows((data as Row[]) ?? []);
+      const sinceStr = toLocalDateStr(since);
+      const [tplR, cmpR] = await Promise.all([
+        supabase.from("routine_templates").select("id,effective_from").eq("user_id", user.id).is("archived_at", null),
+        supabase.from("routine_completions").select("template_id,completion_date,completed,skipped")
+          .eq("user_id", user.id).gte("completion_date", sinceStr),
+      ]);
+      setTemplates((tplR.data ?? []) as Tpl[]);
+      setComps((cmpR.data ?? []) as Comp[]);
       setLoading(false);
     })();
   }, [user]);
 
-  // Build last 7 days bars
+  // Build last 7 days
   const days: { label: string; rate: number; total: number }[] = [];
+  let totalAll = 0, doneAll = 0;
   for (let i = 6; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
+    const d = new Date(); d.setDate(d.getDate() - i);
     const ds = toLocalDateStr(d);
-    const dayRows = rows.filter((r) => r.scheduled_date === ds);
-    const done = dayRows.filter((r) => r.completed).length;
-    const rate = dayRows.length ? Math.round((done / dayRows.length) * 100) : 0;
-    days.push({ label: String(d.getDate()), rate, total: dayRows.length });
+    const eligible = templates.filter((t) => t.effective_from <= ds);
+    const dayComps = comps.filter((c) => c.completion_date === ds);
+    const skipped = dayComps.filter((c) => c.skipped).length;
+    const done = dayComps.filter((c) => c.completed).length;
+    const total = Math.max(0, eligible.length - skipped);
+    const rate = total ? Math.round((done / total) * 100) : 0;
+    days.push({ label: String(d.getDate()), rate, total });
+    totalAll += total; doneAll += done;
   }
-
-  const total = rows.length;
-  const completed = rows.filter((r) => r.completed).length;
-  const rate = total ? Math.round((completed / total) * 100) : 0;
+  const rate = totalAll ? Math.round((doneAll / totalAll) * 100) : 0;
 
   return (
     <Link to="/routine-analytics" className="group block">
@@ -67,7 +70,7 @@ export const RoutineAnalyticsPreview = () => {
 
           {loading ? (
             <Skeleton className="h-24 w-full rounded-lg" />
-          ) : total === 0 ? (
+          ) : totalAll === 0 ? (
             <p className="py-6 text-center text-xs text-muted-foreground">
               রুটিন যোগ করুন বিশ্লেষণ দেখতে
             </p>
@@ -76,7 +79,7 @@ export const RoutineAnalyticsPreview = () => {
               <div className="mb-3 flex items-end gap-3">
                 <p className="text-2xl font-bold font-en">{toBn(rate)}%</p>
                 <p className="mb-1 text-xs text-muted-foreground">
-                  {toBn(completed)}/{toBn(total)} সম্পন্ন
+                  {toBn(doneAll)}/{toBn(totalAll)} সম্পন্ন
                 </p>
               </div>
               <div className="flex h-12 items-end gap-1.5">
@@ -96,7 +99,7 @@ export const RoutineAnalyticsPreview = () => {
                   <Target className="h-3 w-3" /> হার {toBn(rate)}%
                 </span>
                 <span className="flex items-center gap-1.5 text-warning">
-                  <Flame className="h-3 w-3" /> {toBn(completed)} সম্পন্ন
+                  <Flame className="h-3 w-3" /> {toBn(doneAll)} সম্পন্ন
                 </span>
               </div>
             </>

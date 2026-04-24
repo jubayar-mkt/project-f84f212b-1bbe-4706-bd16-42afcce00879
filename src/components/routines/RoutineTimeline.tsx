@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Clock, Pencil, Trash2, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { Clock, Pencil, Trash2, AlertTriangle, CheckCircle2, SkipForward } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -124,11 +124,12 @@ interface Props {
   onToggle: (r: Routine) => void;
   onEdit: (r: Routine) => void;
   onDelete: (r: Routine) => void;
+  onSkip?: (r: Routine) => void;
   /** Compact preview mode (no actions, smaller) */
   compact?: boolean;
 }
 
-export const RoutineTimeline = ({ routines, date, onToggle, onEdit, onDelete, compact }: Props) => {
+export const RoutineTimeline = ({ routines, date, onToggle, onEdit, onDelete, onSkip, compact }: Props) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [now, setNow] = useState(new Date());
 
@@ -246,6 +247,7 @@ export const RoutineTimeline = ({ routines, date, onToggle, onEdit, onDelete, co
                       isActive && cn("ring-2 shadow-glow scale-[1.01] z-10", c.ring),
                       item.overlap && "ring-1 ring-warning/40",
                       completed && "opacity-50",
+                      item.routine.skipped && "opacity-40 grayscale",
                     )}
                     style={{
                       top,
@@ -306,6 +308,18 @@ export const RoutineTimeline = ({ routines, date, onToggle, onEdit, onDelete, co
                         className="absolute right-1 top-1 flex gap-0.5 opacity-0 transition-smooth group-hover:opacity-100"
                         onClick={(e) => e.stopPropagation()}
                       >
+                        {onSkip && !item.routine.completed && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="press h-6 w-6 rounded-md bg-card/60 backdrop-blur-sm text-warning"
+                            onClick={() => onSkip(item.routine)}
+                            aria-label="Skip today"
+                            title="আজকের জন্য স্কিপ"
+                          >
+                            <SkipForward className="h-3 w-3" />
+                          </Button>
+                        )}
                         <Button
                           variant="ghost"
                           size="icon"

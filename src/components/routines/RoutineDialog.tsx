@@ -10,58 +10,52 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import { toLocalDateStr } from "@/lib/bangla";
-import { BanglaDatePicker } from "@/components/ui/bangla-date-picker";
 import { BanglaTimePicker } from "@/components/ui/bangla-time-picker";
 
-export interface RoutineFormData {
+export interface RoutineTemplateFormData {
   id?: string;
   name: string;
   description?: string | null;
-  scheduled_time?: string | null;
+  start_time?: string | null;
   end_time?: string | null;
   priority: "low" | "medium" | "high";
   category?: string | null;
-  scheduled_date: string;
 }
 
 const schema = z.object({
   name: z.string().trim().min(1, "নাম দিন").max(120),
   description: z.string().trim().max(500).optional(),
-  scheduled_time: z.string().optional(),
+  start_time: z.string().optional(),
   end_time: z.string().optional(),
   priority: z.enum(["low", "medium", "high"]),
   category: z.string().trim().max(40).optional(),
-  scheduled_date: z.string().min(1),
 }).refine(
   (v) => {
-    if (v.scheduled_time && v.end_time) return v.end_time > v.scheduled_time;
+    if (v.start_time && v.end_time) return v.end_time > v.start_time;
     return true;
   },
   { message: "শেষের সময় শুরুর সময়ের পরে হতে হবে", path: ["end_time"] },
 );
 
-const CATEGORIES = ["কাজ", "পড়াশোনা", "স্বাস্থ্য", "ব্যক্তিগত", "পরিবার", "অন্যান্য"];
+const CATEGORIES = ["পড়াশোনা", "কাজ", "খেলা", "বিশ্রাম", "স্বাস্থ্য", "ব্যক্তিগত", "পরিবার", "অন্যান্য"];
 
 interface Props {
   open: boolean;
   onOpenChange: (o: boolean) => void;
-  initial?: RoutineFormData | null;
-  defaultDate?: Date;
+  initial?: RoutineTemplateFormData | null;
   onSaved: () => void;
 }
 
-export const RoutineDialog = ({ open, onOpenChange, initial, defaultDate, onSaved }: Props) => {
+export const RoutineDialog = ({ open, onOpenChange, initial, onSaved }: Props) => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState<RoutineFormData>({
+  const [form, setForm] = useState<RoutineTemplateFormData>({
     name: "",
     description: "",
-    scheduled_time: "",
+    start_time: "",
     end_time: "",
     priority: "medium",
     category: "",
-    scheduled_date: toLocalDateStr(defaultDate ?? new Date()),
   });
 
   useEffect(() => {
@@ -70,15 +64,14 @@ export const RoutineDialog = ({ open, onOpenChange, initial, defaultDate, onSave
         initial ?? {
           name: "",
           description: "",
-          scheduled_time: "",
+          start_time: "",
           end_time: "",
           priority: "medium",
           category: "",
-          scheduled_date: toLocalDateStr(defaultDate ?? new Date()),
         }
       );
     }
-  }, [open, initial, defaultDate]);
+  }, [open, initial]);
 
   const handleSave = async () => {
     if (!user) return;
@@ -92,23 +85,23 @@ export const RoutineDialog = ({ open, onOpenChange, initial, defaultDate, onSave
       user_id: user.id,
       name: parsed.data.name,
       description: parsed.data.description || null,
-      scheduled_time: parsed.data.scheduled_time || null,
+      start_time: parsed.data.start_time || null,
       end_time: parsed.data.end_time || null,
       priority: parsed.data.priority,
       category: parsed.data.category || null,
-      scheduled_date: parsed.data.scheduled_date,
+      active: true,
     };
 
     const { error } = initial?.id
-      ? await supabase.from("routines").update(payload).eq("id", initial.id)
-      : await supabase.from("routines").insert(payload);
+      ? await supabase.from("routine_templates").update(payload).eq("id", initial.id)
+      : await supabase.from("routine_templates").insert(payload);
 
     setLoading(false);
     if (error) {
       toast.error(error.message);
       return;
     }
-    toast.success(initial?.id ? "রুটিন আপডেট হয়েছে" : "নতুন রুটিন যোগ হয়েছে ✨");
+    toast.success(initial?.id ? "রুটিন আপডেট হয়েছে — আগামীকাল থেকে প্রযোজ্য" : "নতুন রুটিন যোগ হয়েছে ✨ প্রতিদিন স্বয়ংক্রিয়ভাবে চলবে");
     onOpenChange(false);
     onSaved();
   };
@@ -117,29 +110,49 @@ export const RoutineDialog = ({ open, onOpenChange, initial, defaultDate, onSave
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{initial?.id ? "রুটিন এডিট করুন" : "নতুন রুটিন"}</DialogTitle>
-          <DialogDescription>আপনার দিনের একটি কাজ যোগ করুন</DialogDescription>
+          <DialogTitle>{initial?.id ? "রুটিন এডিট করুন" : "নতুন দৈনিক রুটিন"}</DialogTitle>
+          <DialogDescription>একবার যোগ করুন, প্রতিদিন স্বয়ংক্রিয়ভাবে আসবে</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-2">
           <div className="space-y-1.5">
             <Label htmlFor="r-name">নাম *</Label>
-            <Input id="r-name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="যেমন: সকালে হাঁটা" />
+            <Input id="r-name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="যেমন: সকালে পড়াশোনা" />
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="r-desc">বিবরণ</Label>
+            <Label htmlFor="r-desc">নোট (ঐচ্ছিক)</Label>
             <Textarea id="r-desc" value={form.description ?? ""} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={2} placeholder="বিস্তারিত..." />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label htmlFor="r-date">তারিখ</Label>
-              <BanglaDatePicker
-                id="r-date"
-                value={form.scheduled_date}
-                onChange={(v) => setForm({ ...form, scheduled_date: v || toLocalDateStr(new Date()) })}
+              <Label htmlFor="r-time-start">শুরুর সময় *</Label>
+              <BanglaTimePicker
+                id="r-time-start"
+                value={form.start_time ?? ""}
+                onChange={(v) => setForm({ ...form, start_time: v || null })}
               />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="r-time-end">শেষের সময় *</Label>
+              <BanglaTimePicker
+                id="r-time-end"
+                value={form.end_time ?? ""}
+                onChange={(v) => setForm({ ...form, end_time: v || null })}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label>ক্যাটাগরি</Label>
+              <Select value={form.category ?? ""} onValueChange={(v) => setForm({ ...form, category: v })}>
+                <SelectTrigger><SelectValue placeholder="বাছাই করুন" /></SelectTrigger>
+                <SelectContent>
+                  {CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-1.5">
               <Label>প্রায়োরিটি</Label>
@@ -152,35 +165,6 @@ export const RoutineDialog = ({ open, onOpenChange, initial, defaultDate, onSave
                 </SelectContent>
               </Select>
             </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label htmlFor="r-time-start">শুরু</Label>
-              <BanglaTimePicker
-                id="r-time-start"
-                value={form.scheduled_time ?? ""}
-                onChange={(v) => setForm({ ...form, scheduled_time: v || null })}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="r-time-end">শেষ</Label>
-              <BanglaTimePicker
-                id="r-time-end"
-                value={form.end_time ?? ""}
-                onChange={(v) => setForm({ ...form, end_time: v || null })}
-              />
-            </div>
-          </div>
-
-          <div className="space-y-1.5">
-            <Label>ক্যাটাগরি</Label>
-            <Select value={form.category ?? ""} onValueChange={(v) => setForm({ ...form, category: v })}>
-              <SelectTrigger><SelectValue placeholder="বাছাই করুন" /></SelectTrigger>
-              <SelectContent>
-                {CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-              </SelectContent>
-            </Select>
           </div>
         </div>
 
