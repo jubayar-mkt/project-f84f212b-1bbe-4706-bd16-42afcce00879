@@ -148,12 +148,23 @@
     font-feature-settings: normal;
   }
 
-  /* Use Noto Sans Bengali ONLY for the digit ১ (U+09E7) — everything else
-     (text + other digits ০ ২-৯) keeps the original Hind Siliguri rendering. */
+  /* The actual Noto Sans Bengali webfont (loaded from Google Fonts in index.html)
+     is re-declared here as 'BnOne' with unicode-range U+09E7 so it ONLY supplies
+     the digit ১. All other characters fall through to Hind Siliguri unchanged. */
   @font-face {
     font-family: 'BnOne';
-    src: local('Noto Sans Bengali'), local('NotoSansBengali-Regular');
-    font-weight: 100 900;
+    src: local('Noto Sans Bengali'),
+         local('NotoSansBengali-Regular'),
+         local('Noto Sans Bengali Regular');
+    font-weight: 400;
+    font-style: normal;
+    unicode-range: U+09E7;
+  }
+  @font-face {
+    font-family: 'BnOne';
+    src: local('Noto Sans Bengali Bold'),
+         local('NotoSansBengali-Bold');
+    font-weight: 700;
     font-style: normal;
     unicode-range: U+09E7;
   }
