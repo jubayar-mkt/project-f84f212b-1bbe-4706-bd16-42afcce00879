@@ -24,7 +24,7 @@ const Dashboard = () => {
 
   return (
     <AppLayout>
-      <div data-dashboard="true" className="mx-auto max-w-7xl space-y-6 md:space-y-8">
+      <div className="mx-auto max-w-7xl space-y-6 md:space-y-8">
         {/* Hero greeting */}
         <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-card p-5 md:p-8 shadow-soft">
           <div className="absolute inset-0 bg-glow opacity-70" />
