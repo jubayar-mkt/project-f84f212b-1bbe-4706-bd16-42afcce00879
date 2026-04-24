@@ -86,12 +86,56 @@ const RoutineAnalytics = () => {
     if (!user) return;
     (async () => {
       setLoading(true);
-      const { data } = await supabase
-        .from("routines")
-        .select("id,name,category,scheduled_time,end_time,scheduled_date,completed,priority,completed_at")
-        .gte("scheduled_date", startStr)
-        .lte("scheduled_date", endStr);
-      setRoutines((data as RoutineRow[]) ?? []);
+      const todayStr = toLocalDateStr(new Date());
+      const upperStr = endStr < todayStr ? endStr : todayStr; // don't count future days
+      const [tplR, cmpR] = await Promise.all([
+        supabase
+          .from("routine_templates")
+          .select("id,name,category,start_time,end_time,priority,effective_from,archived_at")
+          .eq("user_id", user.id)
+          .lte("effective_from", upperStr),
+        supabase
+          .from("routine_completions")
+          .select("template_id,completion_date,completed,skipped,completed_at")
+          .eq("user_id", user.id)
+          .gte("completion_date", startStr)
+          .lte("completion_date", upperStr),
+      ]);
+      const templates = (tplR.data ?? []) as Array<{
+        id: string; name: string; category: string | null;
+        start_time: string | null; end_time: string | null;
+        priority: string; effective_from: string; archived_at: string | null;
+      }>;
+      const cmpMap = new Map<string, { completed: boolean; skipped: boolean; completed_at: string | null }>();
+      for (const c of (cmpR.data ?? []) as Array<{ template_id: string; completion_date: string; completed: boolean; skipped: boolean; completed_at: string | null }>) {
+        cmpMap.set(`${c.template_id}|${c.completion_date}`, c);
+      }
+      // Expand templates over the date range
+      const rows: RoutineRow[] = [];
+      const cur = new Date(range.start);
+      const upper = new Date(upperStr);
+      while (cur <= upper) {
+        const ds = toLocalDateStr(cur);
+        for (const t of templates) {
+          if (ds < t.effective_from) continue;
+          if (t.archived_at && ds > toLocalDateStr(new Date(t.archived_at))) continue;
+          const c = cmpMap.get(`${t.id}|${ds}`);
+          if (c?.skipped) continue; // skipped days are excluded from analytics
+          rows.push({
+            id: `${t.id}-${ds}`,
+            name: t.name,
+            category: t.category,
+            scheduled_time: t.start_time,
+            end_time: t.end_time,
+            scheduled_date: ds,
+            completed: !!c?.completed,
+            priority: t.priority,
+            completed_at: c?.completed_at ?? null,
+          });
+        }
+        cur.setDate(cur.getDate() + 1);
+      }
+      setRoutines(rows);
       setLoading(false);
     })();
   }, [user, startStr, endStr]);
