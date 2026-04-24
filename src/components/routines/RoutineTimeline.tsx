@@ -317,7 +317,7 @@ export const RoutineTimeline = ({ routines, date, onToggle, onEdit, onDelete, on
 
                     {!compact && height >= 60 && (
                       <div
-                        className="absolute right-1 top-1 flex gap-0.5 opacity-0 transition-smooth group-hover:opacity-100"
+                        className="absolute right-1 top-1 flex gap-0.5 opacity-60 transition-smooth group-hover:opacity-100"
                         onClick={(e) => e.stopPropagation()}
                       >
                         {onSkip && !item.routine.completed && (
@@ -358,9 +358,10 @@ export const RoutineTimeline = ({ routines, date, onToggle, onEdit, onDelete, on
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="press h-6 w-6 rounded-md bg-card/60 backdrop-blur-sm text-destructive"
+                            className="press h-6 w-6 rounded-md bg-card/70 backdrop-blur-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-200"
                             onClick={() => onDelete(item.routine)}
                             aria-label="Delete"
+                            title="রুটিনটি মুছুন"
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
