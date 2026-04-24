@@ -1,4 +1,4 @@
-const BN_DIGITS = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+const BN_DIGITS = ['০', '1', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
 
 export const toBn = (n: number | string) =>
   String(n).replace(/\d/g, (d) => BN_DIGITS[+d]);
