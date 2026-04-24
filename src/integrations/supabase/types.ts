@@ -152,6 +152,7 @@ export type Database = {
           completed_at: string | null
           created_at: string
           description: string | null
+          end_time: string | null
           id: string
           name: string
           priority: Database["public"]["Enums"]["routine_priority"]
@@ -167,6 +168,7 @@ export type Database = {
           completed_at?: string | null
           created_at?: string
           description?: string | null
+          end_time?: string | null
           id?: string
           name: string
           priority?: Database["public"]["Enums"]["routine_priority"]
@@ -182,6 +184,7 @@ export type Database = {
           completed_at?: string | null
           created_at?: string
           description?: string | null
+          end_time?: string | null
           id?: string
           name?: string
           priority?: Database["public"]["Enums"]["routine_priority"]

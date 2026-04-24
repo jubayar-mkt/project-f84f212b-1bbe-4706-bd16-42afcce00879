@@ -8,7 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { RoutineDialog } from "@/components/routines/RoutineDialog";
-import { RoutineItem, Routine } from "@/components/routines/RoutineItem";
+import { Routine } from "@/components/routines/RoutineItem";
+import { RoutineTimeline } from "@/components/routines/RoutineTimeline";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { BN_DAYS_FULL, formatBnDate, toBn, toLocalDateStr } from "@/lib/bangla";
 
@@ -28,7 +29,7 @@ const Routines = () => {
     setLoading(true);
     const { data, error } = await supabase
       .from("routines")
-      .select("*")
+      .select("id,name,description,scheduled_time,end_time,priority,category,scheduled_date,completed")
       .eq("user_id", user.id)
       .eq("scheduled_date", dateStr)
       .order("scheduled_time", { ascending: true, nullsFirst: false })
@@ -169,16 +170,14 @@ const Routines = () => {
             </Button>
           </Card>
         ) : (
-          <div className="space-y-2.5 animate-fade-in">
-            {routines.map((r) => (
-              <RoutineItem
-                key={r.id}
-                routine={r}
-                onToggle={toggle}
-                onEdit={(rt) => { setEditing(rt); setDialogOpen(true); }}
-                onDelete={(rt) => setDeleting(rt)}
-              />
-            ))}
+          <div className="animate-fade-in">
+            <RoutineTimeline
+              routines={routines}
+              date={date}
+              onToggle={toggle}
+              onEdit={(rt) => { setEditing(rt); setDialogOpen(true); }}
+              onDelete={(rt) => setDeleting(rt)}
+            />
           </div>
         )}
       </div>
@@ -191,6 +190,7 @@ const Routines = () => {
           name: editing.name,
           description: editing.description,
           scheduled_time: editing.scheduled_time,
+          end_time: editing.end_time,
           priority: editing.priority,
           category: editing.category,
           scheduled_date: editing.scheduled_date,
