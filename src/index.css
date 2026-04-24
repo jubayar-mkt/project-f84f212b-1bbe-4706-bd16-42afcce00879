@@ -143,41 +143,32 @@
   }
 
   html {
-    font-family: 'BnOne', 'Hind Siliguri', 'Inter', system-ui, sans-serif;
+    font-family: 'Hind Siliguri', 'Noto Sans Bengali', 'Inter', system-ui, sans-serif;
     font-variant-numeric: normal;
     font-feature-settings: normal;
   }
 
-  /* The actual Noto Sans Bengali webfont (loaded from Google Fonts in index.html)
-     is re-declared here as 'BnOne' with unicode-range U+09E7 so it ONLY supplies
-     the digit ১. All other characters fall through to Hind Siliguri unchanged. */
-  @font-face {
-    font-family: 'BnOne';
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-    src: local('Noto Sans Bengali'),
-         url(https://fonts.gstatic.com/s/notosansbengali/v33/Cn-SJsCGWQxOjaGwMQ6fIiMywrNJIky6nvd8BjzVMvJx2mcSPVFpVEqE-6KmsolLudA.ttf) format('truetype');
-    unicode-range: U+09E7;
-  }
-  @font-face {
-    font-family: 'BnOne';
-    font-style: normal;
-    font-weight: 700;
-    font-display: swap;
-    src: local('Noto Sans Bengali'),
-         url(https://fonts.gstatic.com/s/notosansbengali/v33/Cn-SJsCGWQxOjaGwMQ6fIiMywrNJIky6nvd8BjzVMvJx2mcSPVFpVEqE-6Kmsm5MudA.ttf) format('truetype');
-    unicode-range: U+09E7;
-  }
-
   body {
     @apply bg-background text-foreground antialiased;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings: normal;
     font-variant-ligatures: normal;
+    font-variant-numeric: normal;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   :lang(en), .font-en {
-    font-family: 'Inter', 'Hind Siliguri', system-ui, sans-serif;
+    font-family: 'Inter', 'Hind Siliguri', 'Noto Sans Bengali', system-ui, sans-serif;
+  }
+
+  /* Global safety: prevent any Tailwind/component default (font-sans, font-mono, etc.)
+     from substituting an incompatible Latin-only font for Bangla glyphs. SVG text
+     in charts (Recharts) also inherits this. */
+  *,
+  svg text,
+  tspan {
+    font-family: inherit;
   }
 }
 
