@@ -202,7 +202,7 @@ const HabitAnalytics = () => {
               <div className="mb-5 flex items-center justify-between">
                 <div>
                   <h3 className="text-base font-semibold">চেক-ইন ট্রেন্ড</h3>
-                  <p className="text-xs text-muted-foreground">দৈনিক মোট চেক-ইন (৩০ দিন)</p>
+                  <p className="text-xs text-muted-foreground">দৈনিক মোট চেক-ইন ({toBn(rangeDays)} দিন)</p>
                 </div>
                 <TrendingUp className="h-4 w-4 text-accent" />
               </div>
