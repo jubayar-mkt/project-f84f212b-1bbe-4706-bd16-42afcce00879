@@ -182,28 +182,6 @@
 }
 
 @layer components {
-  /* Dashboard-scoped: force Noto Sans Bengali on every element so বাংলা ডিজিট
-     (especially ১) renders consistently across cards, stats, charts, labels & SVG text.
-     Keeps weight/size/layout untouched — only swaps the font family. */
-  [data-dashboard="true"],
-  [data-dashboard="true"] *,
-  [data-dashboard="true"] svg text,
-  [data-dashboard="true"] tspan {
-    font-family: 'Noto Sans Bengali', 'Hind Siliguri', 'Inter', system-ui, sans-serif !important;
-    font-feature-settings: normal;
-    font-variant-numeric: normal;
-    font-variant-ligatures: normal;
-  }
-
-  /* Preserve icon fonts (lucide etc. use SVG, not text — safe).
-     Allow explicit English font opt-out inside dashboard if needed. */
-  [data-dashboard="true"] .font-en,
-  [data-dashboard="true"] :lang(en) {
-    font-family: 'Inter', 'Noto Sans Bengali', system-ui, sans-serif !important;
-  }
-}
-
-@layer components {
   .glass {
     background: hsl(var(--glass-bg));
     backdrop-filter: blur(16px);
