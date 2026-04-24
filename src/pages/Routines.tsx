@@ -42,6 +42,7 @@ const Routines = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Template | null>(null);
   const [deleting, setDeleting] = useState<Template | null>(null);
+  const [removingId, setRemovingId] = useState<string | null>(null);
 
   const dateStr = toLocalDateStr(date);
   const [now, setNow] = useState(new Date());
@@ -87,7 +88,7 @@ const Routines = () => {
   }, [user, dateStr]);
 
   // Build per-day Routine[] view
-  const routines: Routine[] = useMemo(() => templates.map((t) => {
+  const routines: Routine[] = useMemo(() => templates.filter((t) => t.id !== removingId).map((t) => {
     const c = completions[t.id];
     return {
       id: t.id,
@@ -102,7 +103,7 @@ const Routines = () => {
       source: t.source,
       prayer_key: t.prayer_key,
     };
-  }), [templates, completions]);
+  }), [templates, completions, removingId]);
 
   const upsertCompletion = async (templateId: string, patch: Partial<{ completed: boolean; skipped: boolean; completed_at: string | null }>) => {
     if (!user) return;
@@ -135,14 +136,19 @@ const Routines = () => {
       setDeleting(null);
       return;
     }
-    // Soft-delete: archive so completion history stays for analytics
+    const id = deleting.id;
+    const name = deleting.name;
+    setDeleting(null);
+    // Trigger fade/scale-out animation, then archive
+    setRemovingId(id);
+    await new Promise((r) => setTimeout(r, 220));
     const { error } = await supabase
       .from("routine_templates")
       .update({ active: false, archived_at: new Date().toISOString() })
-      .eq("id", deleting.id);
+      .eq("id", id);
+    setRemovingId(null);
     if (error) toast.error(error.message);
-    else toast.success("রুটিন আর্কাইভ করা হলো (পূর্বের ইতিহাস সংরক্ষিত)");
-    setDeleting(null);
+    else toast.success(`"${name}" মুছে ফেলা হয়েছে`);
     load();
   };
 
@@ -348,15 +354,15 @@ const Routines = () => {
       <AlertDialog open={!!deleting} onOpenChange={(o) => !o && setDeleting(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>রুটিনটি আর্কাইভ করবেন?</AlertDialogTitle>
+            <AlertDialogTitle>আপনি কি এই রুটিনটি মুছে ফেলতে চান?</AlertDialogTitle>
             <AlertDialogDescription>
-              "{deleting?.name}" — এটি আর প্রতিদিনের তালিকায় আসবে না, তবে অ্যানালিটিক্সের জন্য পূর্বের ইতিহাস সংরক্ষিত থাকবে।
+              "{deleting?.name}" — এটি আর প্রতিদিনের তালিকায় আসবে না। পূর্বের ইতিহাস অ্যানালিটিক্সের জন্য সংরক্ষিত থাকবে।
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="press">বাতিল</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="press bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              আর্কাইভ করুন
+            <AlertDialogAction onClick={handleDelete} className="press bg-destructive/90 text-destructive-foreground hover:bg-destructive">
+              মুছে ফেলুন
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
