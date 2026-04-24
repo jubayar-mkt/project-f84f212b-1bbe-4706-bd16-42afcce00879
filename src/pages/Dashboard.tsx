@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Flame, Wallet, ListChecks, Sparkles, TrendingUp, Plus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { RoutineAnalyticsPreview } from "@/components/routines/RoutineAnalyticsPreview";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -90,6 +91,9 @@ const Dashboard = () => {
             </div>
           </Card>
         </div>
+
+        {/* Routine analytics preview */}
+        <RoutineAnalyticsPreview />
 
         {/* Coming soon notice */}
         <Card className="border-dashed border-2 border-border/60 bg-muted/30 p-6 text-center">
