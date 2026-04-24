@@ -18,6 +18,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { toLocalDateStr } from "@/lib/bangla";
+import { BanglaDatePicker } from "@/components/ui/bangla-date-picker";
 
 export const INCOME_CATEGORIES = ["বেতন", "ব্যবসা", "ফ্রিল্যান্স", "উপহার", "বিনিয়োগ", "অন্যান্য"];
 export const EXPENSE_CATEGORIES = [
@@ -154,7 +155,7 @@ export const TransactionDialog = ({ open, onOpenChange, txn, onSaved }: Props) =
 
           <div className="space-y-2">
             <Label>তারিখ</Label>
-            <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="font-en" />
+            <BanglaDatePicker value={date} onChange={(v) => setDate(v || toLocalDateStr(new Date()))} />
           </div>
 
           <div className="space-y-2">
