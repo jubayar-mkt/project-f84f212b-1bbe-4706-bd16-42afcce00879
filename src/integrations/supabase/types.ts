@@ -291,6 +291,84 @@ export type Database = {
         }
         Relationships: []
       }
+      shop_credits: {
+        Row: {
+          created_at: string
+          id: string
+          item_name: string
+          note: string | null
+          purchase_date: string
+          quantity: number
+          shop_name: string
+          total_amount: number
+          unit_price: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item_name: string
+          note?: string | null
+          purchase_date?: string
+          quantity?: number
+          shop_name: string
+          total_amount: number
+          unit_price?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item_name?: string
+          note?: string | null
+          purchase_date?: string
+          quantity?: number
+          shop_name?: string
+          total_amount?: number
+          unit_price?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      shop_payments: {
+        Row: {
+          created_at: string
+          id: string
+          note: string | null
+          paid_amount: number
+          payment_date: string
+          payment_method: string | null
+          shop_name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          paid_amount: number
+          payment_date?: string
+          payment_method?: string | null
+          shop_name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          paid_amount?: number
+          payment_date?: string
+          payment_method?: string | null
+          shop_name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       transactions: {
         Row: {
           amount: number
