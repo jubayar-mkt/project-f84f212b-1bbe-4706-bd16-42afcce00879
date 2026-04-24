@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Clock, Pencil, Trash2, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { Clock, Pencil, Trash2, AlertTriangle, CheckCircle2, SkipForward } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -124,11 +124,12 @@ interface Props {
   onToggle: (r: Routine) => void;
   onEdit: (r: Routine) => void;
   onDelete: (r: Routine) => void;
+  onSkip?: (r: Routine) => void;
   /** Compact preview mode (no actions, smaller) */
   compact?: boolean;
 }
 
-export const RoutineTimeline = ({ routines, date, onToggle, onEdit, onDelete, compact }: Props) => {
+export const RoutineTimeline = ({ routines, date, onToggle, onEdit, onDelete, onSkip, compact }: Props) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [now, setNow] = useState(new Date());
 
