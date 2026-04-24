@@ -143,11 +143,25 @@
   }
 
   html {
-    /* Noto Sans Bengali first — its ১ is clearly distinct from দাঁড়ি (।),
-       unlike Hind Siliguri where ১ renders as a thin curved stroke. */
     font-family: 'Noto Sans Bengali', 'Hind Siliguri', 'Inter', system-ui, sans-serif;
     font-variant-numeric: normal;
     font-feature-settings: normal;
+  }
+
+  /* Global: force Noto Sans Bengali everywhere so every Bangla digit (০-৯)
+     and Bangla character renders from Noto, regardless of component-level
+     font-sans / font-mono / inline font overrides. */
+  *,
+  *::before,
+  *::after,
+  svg text,
+  tspan {
+    font-family: 'Noto Sans Bengali', 'Hind Siliguri', 'Inter', system-ui, sans-serif !important;
+  }
+
+  /* Allow explicit English-only opt-out (e.g., code blocks, brand text). */
+  .font-en, :lang(en).font-en, code, pre, kbd, samp {
+    font-family: 'Inter', 'Noto Sans Bengali', ui-monospace, monospace !important;
   }
 
   body {
