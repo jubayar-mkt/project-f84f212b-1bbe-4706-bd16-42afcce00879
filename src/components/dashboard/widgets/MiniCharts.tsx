@@ -24,11 +24,11 @@ const MiniCard = ({ title, subtitle, icon: Icon, to, gradient, loading, children
               <Icon className="h-4 w-4 text-accent-foreground" />
             </div>
             <div>
-              <h4 className="text-sm font-semibold">{title}</h4>
-              <p className="text-[10px] text-muted-foreground">{subtitle}</p>
+              <h4 className="text-sm font-semibold text-foreground">{title}</h4>
+              <p className="text-[11px] text-muted-foreground font-medium">{subtitle}</p>
             </div>
           </div>
-          <ArrowRight className="h-3.5 w-3.5 text-muted-foreground transition-transform group-hover:translate-x-1" />
+          <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/80 transition-transform group-hover:translate-x-1 group-hover:text-foreground" />
         </div>
         {metric && <p className="font-en text-xl font-bold tracking-tight">{metric}</p>}
         <div className="h-16">

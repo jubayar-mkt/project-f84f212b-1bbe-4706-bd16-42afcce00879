@@ -28,7 +28,7 @@
     --secondary-foreground: 222 47% 18%;
 
     --muted: 220 20% 96%;
-    --muted-foreground: 220 10% 45%;
+    --muted-foreground: 220 14% 32%;
 
     --destructive: 0 75% 55%;
     --destructive-foreground: 0 0% 100%;
@@ -58,8 +58,8 @@
     --shadow-glow: 0 0 40px hsl(160 65% 45% / 0.25);
 
     /* Glass */
-    --glass-bg: 0 0% 100% / 0.7;
-    --glass-border: 220 20% 90% / 0.5;
+    --glass-bg: 0 0% 100% / 0.85;
+    --glass-border: 220 20% 86% / 0.7;
 
     /* Motion */
     --transition-smooth: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -98,7 +98,7 @@
     --secondary-foreground: 210 40% 96%;
 
     --muted: 222 30% 12%;
-    --muted-foreground: 220 15% 65%;
+    --muted-foreground: 220 18% 78%;
 
     --destructive: 0 70% 55%;
     --destructive-foreground: 0 0% 100%;
@@ -123,8 +123,8 @@
     --shadow-lg: 0 12px 40px -8px hsl(0 0% 0% / 0.5);
     --shadow-glow: 0 0 40px hsl(160 65% 50% / 0.3);
 
-    --glass-bg: 222 40% 9% / 0.7;
-    --glass-border: 222 30% 20% / 0.5;
+    --glass-bg: 222 40% 10% / 0.88;
+    --glass-border: 222 30% 24% / 0.75;
 
     --sidebar-background: 222 47% 7%;
     --sidebar-foreground: 210 40% 90%;
