@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Clock, Pencil, Trash2, AlertTriangle, CheckCircle2, SkipForward } from "lucide-react";
+import { Clock, Pencil, Trash2, AlertTriangle, CheckCircle2, SkipForward, Moon, Lock } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -233,6 +234,7 @@ export const RoutineTimeline = ({ routines, date, onToggle, onEdit, onDelete, on
                 const c = colorFor(item.routine.category || item.routine.name);
                 const isActive = item.routine.id === activeId;
                 const completed = item.routine.completed;
+                const isPrayer = item.routine.source === "prayer";
 
                 return (
                   <button
@@ -242,8 +244,8 @@ export const RoutineTimeline = ({ routines, date, onToggle, onEdit, onDelete, on
                     className={cn(
                       "group absolute flex flex-col gap-1 overflow-hidden rounded-xl border border-border/40 p-2 text-left transition-all duration-200 animate-fade-in",
                       "bg-gradient-to-br shadow-soft hover:shadow-elevated hover:scale-[1.01] hover:z-10",
-                      c.from,
-                      c.to,
+                      isPrayer ? "from-accent/25 to-primary-glow/10 border-accent/40 ring-1 ring-accent/30" : c.from,
+                      isPrayer ? "" : c.to,
                       isActive && cn("ring-2 shadow-glow scale-[1.01] z-10", c.ring),
                       item.overlap && "ring-1 ring-warning/40",
                       completed && "opacity-50",
@@ -268,12 +270,17 @@ export const RoutineTimeline = ({ routines, date, onToggle, onEdit, onDelete, on
                       )}
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5">
-                          <span className={cn("h-1.5 w-1.5 shrink-0 rounded-full", c.dot)} />
+                          {isPrayer ? (
+                            <Moon className="h-3 w-3 shrink-0 text-accent" />
+                          ) : (
+                            <span className={cn("h-1.5 w-1.5 shrink-0 rounded-full", c.dot)} />
+                          )}
                           <h4
                             className={cn(
                               "truncate text-xs font-semibold leading-tight",
                               completed && "line-through",
                               isActive && c.text,
+                              isPrayer && "text-accent",
                             )}
                           >
                             {item.routine.name}
@@ -281,6 +288,11 @@ export const RoutineTimeline = ({ routines, date, onToggle, onEdit, onDelete, on
                           {isActive && (
                             <Badge className="h-4 shrink-0 bg-destructive/15 px-1.5 text-[9px] text-destructive border-0">
                               চলছে
+                            </Badge>
+                          )}
+                          {isPrayer && !isActive && (
+                            <Badge className="h-4 shrink-0 bg-accent/15 px-1.5 text-[9px] text-accent border-0">
+                              নামায
                             </Badge>
                           )}
                         </div>
@@ -320,7 +332,8 @@ export const RoutineTimeline = ({ routines, date, onToggle, onEdit, onDelete, on
                             <SkipForward className="h-3 w-3" />
                           </Button>
                         )}
-                        <Button
+                        {!isPrayer && (
+                          <Button
                           variant="ghost"
                           size="icon"
                           className="press h-6 w-6 rounded-md bg-card/60 backdrop-blur-sm"
@@ -328,16 +341,30 @@ export const RoutineTimeline = ({ routines, date, onToggle, onEdit, onDelete, on
                           aria-label="Edit"
                         >
                           <Pencil className="h-3 w-3" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="press h-6 w-6 rounded-md bg-card/60 backdrop-blur-sm text-destructive"
-                          onClick={() => onDelete(item.routine)}
-                          aria-label="Delete"
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
+                          </Button>
+                        )}
+                        {isPrayer ? (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="press h-6 w-6 rounded-md bg-card/60 backdrop-blur-sm text-accent"
+                            onClick={() => toast.info("নামায পেজ থেকে নিয়ন্ত্রণ করুন")}
+                            aria-label="Locked"
+                            title="নামায পেজ থেকে এডিট/ডিলিট করুন"
+                          >
+                            <Lock className="h-3 w-3" />
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="press h-6 w-6 rounded-md bg-card/60 backdrop-blur-sm text-destructive"
+                            onClick={() => onDelete(item.routine)}
+                            aria-label="Delete"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
+                        )}
                       </div>
                     )}
                   </button>
