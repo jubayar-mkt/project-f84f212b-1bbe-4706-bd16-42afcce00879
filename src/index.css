@@ -138,6 +138,17 @@
 }
 
 @layer base {
+  /* Global override: force Noto Sans Bengali for Bangla digits (০-৯) everywhere,
+     regardless of the surrounding font-family. Uses unicode-range so only the
+     digit glyphs are swapped — all other text keeps its original font. */
+  @font-face {
+    font-family: 'BnDigitOverride';
+    src: local('Noto Sans Bengali Regular'), local('NotoSansBengali-Regular'), local('Noto Sans Bengali');
+    font-weight: 100 900;
+    font-style: normal;
+    unicode-range: U+09E6-U+09EF;
+  }
+
   * {
     @apply border-border;
   }
@@ -145,7 +156,7 @@
   html {
     /* Noto Sans Bengali first — its ১ is clearly distinct from দাঁড়ি (।),
        unlike Hind Siliguri where ১ renders as a thin curved stroke. */
-    font-family: 'Noto Sans Bengali', 'Hind Siliguri', 'Inter', system-ui, sans-serif;
+    font-family: 'BnDigitOverride', 'Noto Sans Bengali', 'Hind Siliguri', 'Inter', system-ui, sans-serif;
     font-variant-numeric: normal;
     font-feature-settings: normal;
   }
