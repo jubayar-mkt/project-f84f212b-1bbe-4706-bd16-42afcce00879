@@ -220,9 +220,9 @@ const Namaz = () => {
                       <Icon className={cn("h-5 w-5", tint.split(" ").slice(2).join(" "))} />
                     </div>
                     <div className="min-w-[80px]">
-                      <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">
-                        {isCurrent ? <span className="text-accent">● এখন</span> : "ওয়াক্ত"}
-                      </p>
+                      {isCurrent && (
+                        <p className="text-xs uppercase tracking-wider text-accent font-semibold">● এখন</p>
+                      )}
                       <p className="text-base font-bold text-foreground">{PRAYER_BN[k]}</p>
                     </div>
                     <div className="flex-1 min-w-[180px]">
