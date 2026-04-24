@@ -190,7 +190,9 @@ export const BanglaCalendar = ({
                 aria-label={ds}
                 aria-pressed={isSelected}
               >
-                <span className="font-en leading-none">{toBn(d.getDate())}</span>
+                <span className="leading-none font-bold tabular-nums" style={{ fontFamily: "'Hind Siliguri', system-ui, sans-serif" }}>
+                  {toBn(d.getDate())}
+                </span>
                 {dots && dots.length > 0 && (
                   <span className="absolute bottom-1 left-1/2 flex -translate-x-1/2 gap-0.5">
                     {dots.slice(0, 3).map((dot, idx) => (
