@@ -14,6 +14,83 @@ export type Database = {
   }
   public: {
     Tables: {
+      habit_checkins: {
+        Row: {
+          checkin_date: string
+          count: number
+          created_at: string
+          habit_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          checkin_date?: string
+          count?: number
+          created_at?: string
+          habit_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          checkin_date?: string
+          count?: number
+          created_at?: string
+          habit_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "habit_checkins_habit_id_fkey"
+            columns: ["habit_id"]
+            isOneToOne: false
+            referencedRelation: "habits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      habits: {
+        Row: {
+          active: boolean
+          category: string | null
+          color: string
+          created_at: string
+          description: string | null
+          icon: string
+          id: string
+          name: string
+          target_per_day: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          category?: string | null
+          color?: string
+          created_at?: string
+          description?: string | null
+          icon?: string
+          id?: string
+          name: string
+          target_per_day?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          category?: string | null
+          color?: string
+          created_at?: string
+          description?: string | null
+          icon?: string
+          id?: string
+          name?: string
+          target_per_day?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -35,6 +112,54 @@ export type Database = {
           display_name?: string | null
           id?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      routines: {
+        Row: {
+          category: string | null
+          completed: boolean
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          priority: Database["public"]["Enums"]["routine_priority"]
+          scheduled_date: string
+          scheduled_time: string | null
+          sort_order: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          priority?: Database["public"]["Enums"]["routine_priority"]
+          scheduled_date?: string
+          scheduled_time?: string | null
+          sort_order?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          priority?: Database["public"]["Enums"]["routine_priority"]
+          scheduled_date?: string
+          scheduled_time?: string | null
+          sort_order?: number
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -74,6 +199,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "premium" | "user"
+      routine_priority: "low" | "medium" | "high"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -202,6 +328,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "premium", "user"],
+      routine_priority: ["low", "medium", "high"],
     },
   },
 } as const

@@ -7,6 +7,8 @@ import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Auth from "./pages/Auth.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
+import Routines from "./pages/Routines.tsx";
+import Habits from "./pages/Habits.tsx";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
@@ -29,6 +31,22 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/routines"
+                element={
+                  <ProtectedRoute>
+                    <Routines />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/habits"
+                element={
+                  <ProtectedRoute>
+                    <Habits />
                   </ProtectedRoute>
                 }
               />
