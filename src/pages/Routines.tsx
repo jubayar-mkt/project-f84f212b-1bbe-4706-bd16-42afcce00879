@@ -316,11 +316,21 @@ const Routines = () => {
               onToggle={toggle}
               onEdit={(rt) => {
                 const tpl = templates.find((t) => t.id === rt.id);
-                if (tpl) { setEditing(tpl); setDialogOpen(true); }
+                if (!tpl) return;
+                if (tpl.source === "prayer") {
+                  toast.info("নামায পেজ থেকে এডিট করুন");
+                  return;
+                }
+                setEditing(tpl); setDialogOpen(true);
               }}
               onDelete={(rt) => {
                 const tpl = templates.find((t) => t.id === rt.id);
-                if (tpl) setDeleting(tpl);
+                if (!tpl) return;
+                if (tpl.source === "prayer") {
+                  toast.error("নামাযের রুটিন এখান থেকে মুছা যাবে না — নামায পেজ থেকে নিয়ন্ত্রণ করুন");
+                  return;
+                }
+                setDeleting(tpl);
               }}
               onSkip={skipToday}
             />
