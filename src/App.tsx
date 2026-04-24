@@ -16,6 +16,7 @@ import ShopCredit from "./pages/ShopCredit.tsx";
 import Namaz from "./pages/Namaz.tsx";
 import Achievements from "./pages/Achievements.tsx";
 import Settings from "./pages/Settings.tsx";
+import Savings from "./pages/Savings.tsx";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
@@ -86,6 +87,14 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <ShopCredit />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/savings"
+                element={
+                  <ProtectedRoute>
+                    <Savings />
                   </ProtectedRoute>
                 }
               />
