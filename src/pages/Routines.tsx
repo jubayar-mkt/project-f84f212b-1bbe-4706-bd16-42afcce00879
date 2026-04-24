@@ -23,6 +23,8 @@ interface Template {
   priority: "low" | "medium" | "high";
   active: boolean;
   effective_from: string;
+  source: "manual" | "prayer";
+  prayer_key: "fajr" | "dhuhr" | "asr" | "maghrib" | "isha" | null;
 }
 
 interface Completion {
@@ -51,7 +53,7 @@ const Routines = () => {
     const [tplRes, compRes] = await Promise.all([
       supabase
         .from("routine_templates")
-        .select("id,name,description,start_time,end_time,category,priority,active,effective_from")
+        .select("id,name,description,start_time,end_time,category,priority,active,effective_from,source,prayer_key")
         .eq("user_id", user.id)
         .is("archived_at", null)
         .lte("effective_from", dateStr)
@@ -97,6 +99,8 @@ const Routines = () => {
       category: t.category,
       completed: !!c?.completed,
       skipped: !!c?.skipped,
+      source: t.source,
+      prayer_key: t.prayer_key,
     };
   }), [templates, completions]);
 
@@ -126,6 +130,11 @@ const Routines = () => {
 
   const handleDelete = async () => {
     if (!deleting) return;
+    if (deleting.source === "prayer") {
+      toast.error("নামাযের রুটিন এখান থেকে মুছা যাবে না — নামায পেজ থেকে নিয়ন্ত্রণ করুন");
+      setDeleting(null);
+      return;
+    }
     // Soft-delete: archive so completion history stays for analytics
     const { error } = await supabase
       .from("routine_templates")
@@ -307,11 +316,21 @@ const Routines = () => {
               onToggle={toggle}
               onEdit={(rt) => {
                 const tpl = templates.find((t) => t.id === rt.id);
-                if (tpl) { setEditing(tpl); setDialogOpen(true); }
+                if (!tpl) return;
+                if (tpl.source === "prayer") {
+                  toast.info("নামায পেজ থেকে এডিট করুন");
+                  return;
+                }
+                setEditing(tpl); setDialogOpen(true);
               }}
               onDelete={(rt) => {
                 const tpl = templates.find((t) => t.id === rt.id);
-                if (tpl) setDeleting(tpl);
+                if (!tpl) return;
+                if (tpl.source === "prayer") {
+                  toast.error("নামাযের রুটিন এখান থেকে মুছা যাবে না — নামায পেজ থেকে নিয়ন্ত্রণ করুন");
+                  return;
+                }
+                setDeleting(tpl);
               }}
               onSkip={skipToday}
             />

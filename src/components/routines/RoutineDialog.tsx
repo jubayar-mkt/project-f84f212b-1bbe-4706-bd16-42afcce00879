@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { BanglaTimePicker } from "@/components/ui/bangla-time-picker";
+import { findConflicts } from "@/lib/prayer";
 
 export interface RoutineTemplateFormData {
   id?: string;
@@ -20,6 +21,7 @@ export interface RoutineTemplateFormData {
   end_time?: string | null;
   priority: "low" | "medium" | "high";
   category?: string | null;
+  source?: "manual" | "prayer";
 }
 
 const schema = z.object({
@@ -81,6 +83,22 @@ export const RoutineDialog = ({ open, onOpenChange, initial, onSaved }: Props) =
       return;
     }
     setLoading(true);
+
+    // Conflict prevention — block overlapping routines
+    if (parsed.data.start_time) {
+      const conflicts = await findConflicts(
+        user.id,
+        { start: parsed.data.start_time, end: parsed.data.end_time || null },
+        initial?.id,
+      );
+      if (conflicts.length > 0) {
+        setLoading(false);
+        const names = conflicts.map((c) => `"${c.name}"${c.source === "prayer" ? " (নামায)" : ""}`).join(", ");
+        toast.error(`সময় conflict: ${names} এর সাথে মিলে যাচ্ছে — অন্য সময় বাছাই করুন`, { duration: 6000 });
+        return;
+      }
+    }
+
     const payload = {
       user_id: user.id,
       name: parsed.data.name,
@@ -90,6 +108,7 @@ export const RoutineDialog = ({ open, onOpenChange, initial, onSaved }: Props) =
       priority: parsed.data.priority,
       category: parsed.data.category || null,
       active: true,
+      source: "manual" as const,
     };
 
     const { error } = initial?.id

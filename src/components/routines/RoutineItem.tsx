@@ -10,4 +10,6 @@ export interface Routine {
   category: string | null;
   completed: boolean;
   skipped?: boolean;
+  source?: "manual" | "prayer";
+  prayer_key?: "fajr" | "dhuhr" | "asr" | "maghrib" | "isha" | null;
 }
