@@ -43,6 +43,7 @@ import {
 } from "recharts";
 import { TransactionDialog, Txn } from "@/components/finance/TransactionDialog";
 import { BudgetDialog } from "@/components/finance/BudgetDialog";
+import { AIInsights } from "@/components/finance/AIInsights";
 import { BN_MONTHS, formatBnDateShort, toBn } from "@/lib/bangla";
 import { StatCard } from "@/components/dashboard/StatCard";
 
@@ -231,6 +232,9 @@ const Finance = () => {
                 accent="accent"
               />
             </div>
+
+            {/* AI Insights */}
+            <AIInsights />
 
             {/* Charts */}
             <div className="grid gap-6 lg:grid-cols-3">
