@@ -7,6 +7,7 @@ import { Bell, LogOut } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
+import { Logo } from "@/components/Logo";
 
 export const AppLayout = ({ children }: { children: ReactNode }) => {
   const { user, signOut } = useAuth();
@@ -26,10 +27,13 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
       <div className="flex min-h-screen w-full bg-background">
         <AppSidebar />
         <div className="flex flex-1 flex-col">
-          <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border/60 glass px-4 md:px-6">
-            <div className="flex items-center gap-3">
-              <SidebarTrigger className="press" />
-              <div className="hidden sm:block">
+          <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-border/60 glass backdrop-blur-xl px-3 shadow-soft md:px-6">
+            <div className="flex items-center gap-2 md:gap-3 min-w-0">
+              <SidebarTrigger className="press shrink-0" />
+              <div className="flex items-center shrink-0">
+                <Logo />
+              </div>
+              <div className="hidden lg:block pl-2">
                 <h2 className="text-sm font-medium text-muted-foreground">স্বাগতম 👋</h2>
               </div>
             </div>
