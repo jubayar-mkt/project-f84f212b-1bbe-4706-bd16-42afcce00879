@@ -50,8 +50,34 @@ export const DepositDialog = ({ open, onOpenChange, goalId, goalName, onSaved }:
       deposit_date: date,
       note: note.trim() || null,
     });
+    if (error) {
+      setSaving(false);
+      return toast.error(error.message);
+    }
+
+    // Sync goal completed state based on total deposits vs target
+    const [{ data: goal }, { data: deps }] = await Promise.all([
+      supabase.from("savings_goals").select("target_amount, completed").eq("id", goalId).maybeSingle(),
+      supabase.from("savings_deposits").select("amount").eq("goal_id", goalId),
+    ]);
+    if (goal) {
+      const total = (deps ?? []).reduce((s, d: any) => s + Number(d.amount), 0);
+      const shouldComplete = total >= Number(goal.target_amount);
+      if (shouldComplete && !goal.completed) {
+        await supabase
+          .from("savings_goals")
+          .update({ completed: true, completed_at: new Date().toISOString() })
+          .eq("id", goalId);
+        toast.success("🎉 গোল পূর্ণ হয়েছে!");
+      } else if (!shouldComplete && goal.completed) {
+        await supabase
+          .from("savings_goals")
+          .update({ completed: false, completed_at: null })
+          .eq("id", goalId);
+      }
+    }
+
     setSaving(false);
-    if (error) return toast.error(error.message);
     toast.success(`৳${toBn(amt)} যোগ হয়েছে`);
     onSaved();
     onOpenChange(false);

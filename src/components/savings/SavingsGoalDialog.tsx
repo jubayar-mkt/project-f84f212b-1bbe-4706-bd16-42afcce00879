@@ -73,8 +73,31 @@ export const SavingsGoalDialog = ({ open, onOpenChange, goal, onSaved }: Props) 
     const { error } = goal
       ? await supabase.from("savings_goals").update(payload).eq("id", goal.id)
       : await supabase.from("savings_goals").insert(payload);
+    if (error) {
+      setSaving(false);
+      return toast.error(error.message);
+    }
+
+    // If editing, re-sync completed state since target may have changed
+    if (goal) {
+      const { data: deps } = await supabase
+        .from("savings_deposits")
+        .select("amount")
+        .eq("goal_id", goal.id);
+      const total = (deps ?? []).reduce((s, d: any) => s + Number(d.amount), 0);
+      const shouldComplete = total >= amt;
+      if (shouldComplete !== goal.completed) {
+        await supabase
+          .from("savings_goals")
+          .update({
+            completed: shouldComplete,
+            completed_at: shouldComplete ? new Date().toISOString() : null,
+          })
+          .eq("id", goal.id);
+      }
+    }
+
     setSaving(false);
-    if (error) return toast.error(error.message);
     toast.success(goal ? "আপডেট হয়েছে" : "নতুন গোল যোগ হয়েছে");
     onSaved();
     onOpenChange(false);
