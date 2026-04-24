@@ -108,7 +108,7 @@ export const syncPrayerRoutine = async (
 
   const payload = {
     user_id: userId,
-    name: `নামায — ${PRAYER_BN[key]}`,
+    name: PRAYER_BN[key],
     description: "স্বয়ংক্রিয়ভাবে নামাযের সময় থেকে যোগ হয়েছে",
     start_time: startHHMM,
     end_time: endHHMM,

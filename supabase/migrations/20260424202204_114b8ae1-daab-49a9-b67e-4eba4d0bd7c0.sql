@@ -1,0 +1,1 @@
+UPDATE public.routine_templates SET name = CASE prayer_key WHEN 'fajr' THEN 'ফজর' WHEN 'dhuhr' THEN 'যোহর' WHEN 'asr' THEN 'আসর' WHEN 'maghrib' THEN 'মাগরিব' WHEN 'isha' THEN 'এশা' END WHERE source = 'prayer' AND prayer_key IS NOT NULL;
