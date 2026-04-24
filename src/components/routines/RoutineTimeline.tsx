@@ -307,6 +307,18 @@ export const RoutineTimeline = ({ routines, date, onToggle, onEdit, onDelete, on
                         className="absolute right-1 top-1 flex gap-0.5 opacity-0 transition-smooth group-hover:opacity-100"
                         onClick={(e) => e.stopPropagation()}
                       >
+                        {onSkip && !item.routine.completed && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="press h-6 w-6 rounded-md bg-card/60 backdrop-blur-sm text-warning"
+                            onClick={() => onSkip(item.routine)}
+                            aria-label="Skip today"
+                            title="আজকের জন্য স্কিপ"
+                          >
+                            <SkipForward className="h-3 w-3" />
+                          </Button>
+                        )}
                         <Button
                           variant="ghost"
                           size="icon"
