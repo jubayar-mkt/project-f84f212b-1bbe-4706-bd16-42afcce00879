@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { toLocalDateStr } from "@/lib/bangla";
 import { BanglaDatePicker } from "@/components/ui/bangla-date-picker";
+import { BanglaTimePicker } from "@/components/ui/bangla-time-picker";
 
 export interface RoutineFormData {
   id?: string;
@@ -131,7 +132,11 @@ export const RoutineDialog = ({ open, onOpenChange, initial, defaultDate, onSave
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="r-time">সময়</Label>
-              <Input id="r-time" type="time" value={form.scheduled_time ?? ""} onChange={(e) => setForm({ ...form, scheduled_time: e.target.value })} />
+              <BanglaTimePicker
+                id="r-time"
+                value={form.scheduled_time ?? ""}
+                onChange={(v) => setForm({ ...form, scheduled_time: v || null })}
+              />
             </div>
           </div>
 
