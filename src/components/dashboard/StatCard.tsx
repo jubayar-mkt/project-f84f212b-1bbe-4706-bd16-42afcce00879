@@ -8,7 +8,7 @@ interface StatCardProps {
   hint?: string;
   icon: LucideIcon;
   trend?: { value: string; positive: boolean };
-  accent?: "primary" | "accent" | "success" | "warning";
+  accent?: "primary" | "accent" | "success" | "warning" | "destructive";
 }
 
 const accentMap = {
@@ -16,6 +16,7 @@ const accentMap = {
   accent: "from-accent/15 to-accent/5 text-accent",
   success: "from-success/15 to-success/5 text-success",
   warning: "from-warning/15 to-warning/5 text-warning",
+  destructive: "from-destructive/15 to-destructive/5 text-destructive",
 };
 
 export const StatCard = ({ label, value, hint, icon: Icon, trend, accent = "accent" }: StatCardProps) => {
