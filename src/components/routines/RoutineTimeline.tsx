@@ -247,6 +247,7 @@ export const RoutineTimeline = ({ routines, date, onToggle, onEdit, onDelete, on
                       isActive && cn("ring-2 shadow-glow scale-[1.01] z-10", c.ring),
                       item.overlap && "ring-1 ring-warning/40",
                       completed && "opacity-50",
+                      item.routine.skipped && "opacity-40 grayscale",
                     )}
                     style={{
                       top,
