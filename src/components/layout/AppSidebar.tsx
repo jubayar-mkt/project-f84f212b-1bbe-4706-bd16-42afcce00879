@@ -1,4 +1,4 @@
-import { LayoutDashboard, ListTodo, Sparkles, Wallet, Trophy, Settings } from "lucide-react";
+import { LayoutDashboard, ListTodo, Sparkles, Wallet, Trophy, Settings, BarChart3 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -18,6 +18,7 @@ const mainItems = [
   { title: "ড্যাশবোর্ড", url: "/dashboard", icon: LayoutDashboard },
   { title: "রুটিন", url: "/routines", icon: ListTodo },
   { title: "অভ্যাস", url: "/habits", icon: Sparkles },
+  { title: "অ্যানালিটিক্স", url: "/analytics", icon: BarChart3 },
   { title: "অর্থ", url: "/finance", icon: Wallet },
 ];
 

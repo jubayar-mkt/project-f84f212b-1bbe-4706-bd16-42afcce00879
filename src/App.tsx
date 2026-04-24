@@ -9,6 +9,7 @@ import Auth from "./pages/Auth.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import Routines from "./pages/Routines.tsx";
 import Habits from "./pages/Habits.tsx";
+import HabitAnalytics from "./pages/HabitAnalytics.tsx";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
@@ -47,6 +48,14 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <Habits />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/analytics"
+                element={
+                  <ProtectedRoute>
+                    <HabitAnalytics />
                   </ProtectedRoute>
                 }
               />
