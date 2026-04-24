@@ -13,6 +13,7 @@ import HabitAnalytics from "./pages/HabitAnalytics.tsx";
 import Finance from "./pages/Finance.tsx";
 import RoutineAnalytics from "./pages/RoutineAnalytics.tsx";
 import ShopCredit from "./pages/ShopCredit.tsx";
+import Namaz from "./pages/Namaz.tsx";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
@@ -83,6 +84,14 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <ShopCredit />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/namaz"
+                element={
+                  <ProtectedRoute>
+                    <Namaz />
                   </ProtectedRoute>
                 }
               />
