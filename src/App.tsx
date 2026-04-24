@@ -11,6 +11,7 @@ import Routines from "./pages/Routines.tsx";
 import Habits from "./pages/Habits.tsx";
 import HabitAnalytics from "./pages/HabitAnalytics.tsx";
 import Finance from "./pages/Finance.tsx";
+import RoutineAnalytics from "./pages/RoutineAnalytics.tsx";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
@@ -57,6 +58,14 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <HabitAnalytics />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/routine-analytics"
+                element={
+                  <ProtectedRoute>
+                    <RoutineAnalytics />
                   </ProtectedRoute>
                 }
               />
