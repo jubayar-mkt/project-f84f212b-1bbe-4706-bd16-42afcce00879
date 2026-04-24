@@ -83,6 +83,12 @@ const Savings = () => {
 
   const handleDelete = async () => {
     if (!deleteId) return;
+    // Delete deposits first (no FK cascade), then the goal
+    const { error: depErr } = await supabase
+      .from("savings_deposits")
+      .delete()
+      .eq("goal_id", deleteId);
+    if (depErr) return toast.error(depErr.message);
     const { error } = await supabase.from("savings_goals").delete().eq("id", deleteId);
     if (error) return toast.error(error.message);
     toast.success("গোল মুছে ফেলা হয়েছে");
