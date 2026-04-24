@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Link } from "react-router-dom";
-import { ArrowRight, Wallet } from "lucide-react";
+import { Wallet } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toBn } from "@/lib/bangla";
@@ -35,18 +34,15 @@ export const FinanceBalanceCard = () => {
   const positive = balance >= 0;
 
   return (
-    <Link to="/finance" className="group block">
-      <Card className="relative h-full overflow-hidden p-5 shadow-soft glass transition-spring hover:-translate-y-0.5 hover:shadow-elevated">
-        <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-gradient-primary opacity-20 blur-2xl group-hover:opacity-30 transition-opacity" />
+    <div className="block">
+      <Card className="relative h-full overflow-hidden p-5 shadow-soft glass">
+        <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-gradient-primary opacity-20 blur-2xl" />
         <div className="relative space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary">
                 <Wallet className="h-4 w-4 text-primary-foreground" />
               </div>
-              <p className="text-xs font-medium text-muted-foreground">এ মাসের ব্যালেন্স</p>
-            </div>
-            <ArrowRight className="h-3.5 w-3.5 text-muted-foreground transition-transform group-hover:translate-x-1" />
+              <p className="text-xs font-semibold text-foreground/80">এ মাসের ব্যালেন্স</p>
           </div>
           {loading ? (
             <Skeleton className="h-14 w-full rounded-md" />
@@ -55,14 +51,14 @@ export const FinanceBalanceCard = () => {
               <p className={`font-en text-2xl font-bold tracking-tight ${positive ? "text-foreground" : "text-destructive"}`}>
                 {fmtMoney(balance)}
               </p>
-              <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
-                <span className="text-success">+{fmtMoney(income)}</span>
-                <span className="text-destructive">−{fmtMoney(expense)}</span>
+              <div className="flex items-center gap-3 text-[11px] font-medium">
+                <span className="text-success font-semibold">+{fmtMoney(income)}</span>
+                <span className="text-destructive font-semibold">−{fmtMoney(expense)}</span>
               </div>
             </>
           )}
         </div>
       </Card>
-    </Link>
+    </div>
   );
 };

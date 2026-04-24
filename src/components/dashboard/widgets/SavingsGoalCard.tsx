@@ -39,7 +39,7 @@ export const SavingsGoalCard = ({ goal = 30 }: { goal?: number }) => {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-success to-success/60">
             <PiggyBank className="h-4 w-4 text-success-foreground" />
           </div>
-          <p className="text-xs font-medium text-muted-foreground">সঞ্চয় লক্ষ্য</p>
+          <p className="text-xs font-semibold text-foreground/80">সঞ্চয় লক্ষ্য</p>
         </div>
         {loading ? (
           <Skeleton className="h-14 w-full rounded-md" />
@@ -47,12 +47,12 @@ export const SavingsGoalCard = ({ goal = 30 }: { goal?: number }) => {
           <>
             <div className="flex items-baseline gap-2">
               <p className="font-en text-2xl font-bold tracking-tight">{toBn(rate)}%</p>
-              <p className="text-xs text-muted-foreground font-en">/ {toBn(goal)}%</p>
+              <p className="text-xs text-muted-foreground font-en font-medium">/ {toBn(goal)}%</p>
             </div>
             <div className="h-1.5 overflow-hidden rounded-full bg-muted">
               <div className="h-full bg-gradient-to-r from-success to-success/70 transition-spring" style={{ width: `${pct}%` }} />
             </div>
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-[11px] text-muted-foreground font-medium">
               {rate >= goal ? "🎉 লক্ষ্য পূরণ" : `${toBn(goal - rate)}% বাকি`}
             </p>
           </>
