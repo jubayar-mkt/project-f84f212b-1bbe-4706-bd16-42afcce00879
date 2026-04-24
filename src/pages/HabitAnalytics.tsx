@@ -20,6 +20,7 @@ import {
 import { TrendingUp, Trophy, AlertCircle, Activity, Flame, CalendarCheck } from "lucide-react";
 import { BN_DAYS, calcLongestStreak, calcStreak, toBn, toLocalDateStr } from "@/lib/bangla";
 import { StatCard } from "@/components/dashboard/StatCard";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 interface Habit {
   id: string;
@@ -34,20 +35,26 @@ interface CheckIn {
   count: number;
 }
 
-const RANGE_DAYS = 30;
+const RANGE_OPTIONS = [
+  { value: 7, label: "৭ দিন" },
+  { value: 30, label: "৩০ দিন" },
+  { value: 90, label: "৯০ দিন" },
+] as const;
+type RangeDays = (typeof RANGE_OPTIONS)[number]["value"];
 
 const HabitAnalytics = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [habits, setHabits] = useState<Habit[]>([]);
   const [checkins, setCheckins] = useState<CheckIn[]>([]);
+  const [rangeDays, setRangeDays] = useState<RangeDays>(30);
 
   useEffect(() => {
     if (!user) return;
     (async () => {
       setLoading(true);
       const since = new Date();
-      since.setDate(since.getDate() - RANGE_DAYS + 1);
+      since.setDate(since.getDate() - rangeDays + 1);
       const sinceStr = toLocalDateStr(since);
 
       const [{ data: h }, { data: c }] = await Promise.all([
@@ -58,7 +65,7 @@ const HabitAnalytics = () => {
       setCheckins((c as CheckIn[]) ?? []);
       setLoading(false);
     })();
-  }, [user]);
+  }, [user, rangeDays]);
 
   // Build last-30-days trend (sum of check-ins)
   const trendData = useMemo(() => {
