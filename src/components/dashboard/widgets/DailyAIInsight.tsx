@@ -42,8 +42,8 @@ export const DailyAIInsight = () => {
               <Sparkles className="h-5 w-5 text-accent-foreground" />
             </div>
             <div>
-              <h3 className="text-base font-semibold">আজকের AI অন্তর্দৃষ্টি</h3>
-              <p className="text-xs text-muted-foreground">ব্যক্তিগত ফোকাস ও পরামর্শ</p>
+              <h3 className="text-base font-semibold text-foreground">আজকের AI অন্তর্দৃষ্টি</h3>
+              <p className="text-xs text-muted-foreground font-medium">ব্যক্তিগত ফোকাস ও পরামর্শ</p>
             </div>
           </div>
           <Button
@@ -66,36 +66,36 @@ export const DailyAIInsight = () => {
           </div>
         ) : data ? (
           <div className="space-y-3 animate-fade-in">
-            <div className="rounded-lg border border-border/50 bg-card/60 p-4">
-              <p className="text-sm leading-relaxed">{data.summary}</p>
+            <div className="rounded-lg border border-border/60 bg-card/80 p-4">
+              <p className="text-sm leading-relaxed text-foreground">{data.summary}</p>
             </div>
             <div className="grid gap-2 sm:grid-cols-3">
-              <div className="flex gap-2 rounded-lg border border-accent/20 bg-accent/5 p-3">
+              <div className="flex gap-2 rounded-lg border border-accent/30 bg-accent/10 p-3">
                 <Target className="h-4 w-4 shrink-0 mt-0.5 text-accent" />
                 <div>
-                  <p className="text-[10px] uppercase tracking-wider font-semibold text-accent">ফোকাস</p>
-                  <p className="text-xs leading-relaxed">{data.productivity}</p>
+                  <p className="text-[10px] uppercase tracking-wider font-bold text-accent">ফোকাস</p>
+                  <p className="text-xs leading-relaxed text-foreground/90">{data.productivity}</p>
                 </div>
               </div>
-              <div className="flex gap-2 rounded-lg border border-warning/20 bg-warning/5 p-3">
+              <div className="flex gap-2 rounded-lg border border-warning/30 bg-warning/10 p-3">
                 <Flame className="h-4 w-4 shrink-0 mt-0.5 text-warning" />
                 <div>
-                  <p className="text-[10px] uppercase tracking-wider font-semibold text-warning">অভ্যাস</p>
-                  <p className="text-xs leading-relaxed">{data.habit}</p>
+                  <p className="text-[10px] uppercase tracking-wider font-bold text-warning">অভ্যাস</p>
+                  <p className="text-xs leading-relaxed text-foreground/90">{data.habit}</p>
                 </div>
               </div>
-              <div className="flex gap-2 rounded-lg border border-success/20 bg-success/5 p-3">
+              <div className="flex gap-2 rounded-lg border border-success/30 bg-success/10 p-3">
                 <Wallet className="h-4 w-4 shrink-0 mt-0.5 text-success" />
                 <div>
-                  <p className="text-[10px] uppercase tracking-wider font-semibold text-success">খরচ</p>
-                  <p className="text-xs leading-relaxed">{data.spending}</p>
+                  <p className="text-[10px] uppercase tracking-wider font-bold text-success">খরচ</p>
+                  <p className="text-xs leading-relaxed text-foreground/90">{data.spending}</p>
                 </div>
               </div>
             </div>
           </div>
         ) : (
-          <div className="rounded-lg border border-dashed border-border/60 bg-muted/30 p-6 text-center">
-            <p className="text-sm text-muted-foreground">
+          <div className="rounded-lg border border-dashed border-border/70 bg-muted/40 p-6 text-center">
+            <p className="text-sm text-foreground/80 font-medium">
               আজকের productivity, অভ্যাস ও খরচ নিয়ে AI পরামর্শ পেতে বাটনে ক্লিক করুন
             </p>
           </div>

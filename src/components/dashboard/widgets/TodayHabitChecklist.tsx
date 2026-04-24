@@ -59,11 +59,11 @@ export const TodayHabitChecklist = () => {
               <Sparkles className="h-4 w-4 text-warning-foreground" />
             </div>
             <div>
-              <h3 className="text-sm font-semibold">আজকের অভ্যাস</h3>
-              <p className="text-[10px] text-muted-foreground">checklist</p>
+              <h3 className="text-sm font-semibold text-foreground">আজকের অভ্যাস</h3>
+              <p className="text-[11px] text-muted-foreground font-medium">checklist</p>
             </div>
           </div>
-          <Link to="/habits" className="text-xs text-accent hover:underline inline-flex items-center gap-1">
+          <Link to="/habits" className="text-xs font-semibold text-accent hover:text-accent/80 hover:underline inline-flex items-center gap-1 transition-colors">
             সব <ArrowRight className="h-3 w-3" />
           </Link>
         </div>
@@ -73,7 +73,7 @@ export const TodayHabitChecklist = () => {
             {[0,1,2].map((i) => <Skeleton key={i} className="h-12 w-full rounded-lg" />)}
           </div>
         ) : habits.length === 0 ? (
-          <p className="py-6 text-center text-xs text-muted-foreground">কোনো অভ্যাস যোগ করা নেই</p>
+          <p className="py-6 text-center text-xs text-muted-foreground font-medium">কোনো অভ্যাস যোগ করা নেই</p>
         ) : (
           <ul className="space-y-2 max-h-64 overflow-auto no-scrollbar">
             {habits.map((h) => {
@@ -84,14 +84,14 @@ export const TodayHabitChecklist = () => {
                   <button
                     onClick={() => tick(h)}
                     disabled={done}
-                    className={`press flex w-full items-center gap-3 rounded-lg border p-2.5 text-left transition-smooth ${done ? "border-success/30 bg-success/10" : "border-border/50 bg-card/40 hover:border-accent/30 hover:bg-accent/5"}`}
+                    className={`press flex w-full items-center gap-3 rounded-lg border p-2.5 text-left transition-smooth ${done ? "border-success/40 bg-success/15" : "border-border/60 bg-card/60 hover:border-accent/40 hover:bg-accent/10"}`}
                   >
-                    <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-md ${done ? "bg-success text-success-foreground" : "bg-muted text-muted-foreground"}`}>
+                    <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-md ${done ? "bg-success text-success-foreground" : "bg-muted text-foreground/70"}`}>
                       <Check className="h-4 w-4" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className={`truncate text-sm font-medium ${done ? "line-through opacity-70" : ""}`}>{h.name}</p>
-                      <p className="font-en text-[10px] text-muted-foreground">{toBn(cur)}/{toBn(h.target_per_day)}</p>
+                      <p className={`truncate text-sm font-semibold text-foreground ${done ? "line-through opacity-80" : ""}`}>{h.name}</p>
+                      <p className="font-en text-[11px] text-muted-foreground font-medium">{toBn(cur)}/{toBn(h.target_per_day)}</p>
                     </div>
                   </button>
                 </li>

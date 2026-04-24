@@ -55,10 +55,10 @@ export const TodayFocus = () => {
       <div className="relative space-y-5">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-base font-semibold">আজকের ফোকাস</h3>
-            <p className="text-xs text-muted-foreground">এখন ও পরবর্তী কাজ</p>
+            <h3 className="text-base font-semibold text-foreground">আজকের ফোকাস</h3>
+            <p className="text-xs text-muted-foreground font-medium">এখন ও পরবর্তী কাজ</p>
           </div>
-          <Link to="/routines" className="text-xs text-accent hover:underline inline-flex items-center gap-1">
+          <Link to="/routines" className="text-xs font-semibold text-accent hover:text-accent/80 hover:underline inline-flex items-center gap-1 transition-colors">
             সব দেখুন <ArrowRight className="h-3 w-3" />
           </Link>
         </div>
@@ -89,35 +89,35 @@ export const TodayFocus = () => {
                 </div>
               </div>
             ) : (
-              <div className="rounded-xl border border-dashed border-border/60 bg-muted/20 p-4 text-center">
-                <p className="text-xs text-muted-foreground">এই মুহূর্তে কোনো রুটিন চলছে না</p>
+              <div className="rounded-xl border border-dashed border-border/70 bg-muted/40 p-4 text-center">
+                <p className="text-xs text-muted-foreground font-medium">এই মুহূর্তে কোনো রুটিন চলছে না</p>
               </div>
             )}
 
             {/* Next + upcoming list */}
             {next ? (
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
+                <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-foreground/70 font-bold">
                   <Bell className="h-3 w-3" /> পরবর্তী
                 </div>
                 {upcoming.map((u, i) => (
-                  <div key={u.id} className={`flex items-center gap-3 rounded-lg border p-3 transition-smooth ${i === 0 ? "border-accent/20 bg-accent/5" : "border-border/50 bg-card/40"}`}>
+                  <div key={u.id} className={`flex items-center gap-3 rounded-lg border p-3 transition-smooth ${i === 0 ? "border-accent/30 bg-accent/10" : "border-border/60 bg-card/60"}`}>
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted">
-                      <Clock className="h-4 w-4 text-muted-foreground" />
+                      <Clock className="h-4 w-4 text-foreground/70" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium">{u.name}</p>
-                      <p className="font-en text-[11px] text-muted-foreground">
+                      <p className="truncate text-sm font-semibold text-foreground">{u.name}</p>
+                      <p className="font-en text-[11px] text-muted-foreground font-medium">
                         {formatBnTime(u.start_time)}{u.end_time && <> – {formatBnTime(u.end_time)}</>}
                       </p>
                     </div>
-                    {i === 0 && <span className="rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-medium text-accent">পরবর্তী</span>}
+                    {i === 0 && <span className="rounded-full bg-accent/20 px-2 py-0.5 text-[10px] font-bold text-accent">পরবর্তী</span>}
                   </div>
                 ))}
               </div>
             ) : (
               !active && tpls.length === 0 && (
-                <Link to="/routines" className="block rounded-xl border border-dashed border-border/60 bg-muted/20 p-4 text-center text-xs text-muted-foreground hover:bg-muted/40">
+                <Link to="/routines" className="block rounded-xl border border-dashed border-border/70 bg-muted/30 p-4 text-center text-xs font-medium text-foreground/80 hover:bg-muted/50 hover:text-foreground transition-colors">
                   রুটিন তৈরি করুন আপনার দিন সাজাতে
                 </Link>
               )
@@ -134,9 +134,9 @@ export const TodayFocus = () => {
               else if (hour < 22) tip = "দিনের রিভিউ করুন — আগামীকালের পরিকল্পনা সাজান";
               else tip = "রিল্যাক্স করুন — স্ক্রিন কম, ঘুম বেশি 🌿";
               return (
-                <div className="flex items-start gap-2 rounded-lg border border-border/40 bg-muted/30 p-3">
+                <div className="flex items-start gap-2 rounded-lg border border-border/60 bg-muted/50 p-3">
                   <span className="text-base leading-none mt-0.5">💡</span>
-                  <p className="text-xs leading-relaxed text-muted-foreground">{tip}</p>
+                  <p className="text-xs leading-relaxed text-foreground/85 font-medium">{tip}</p>
                 </div>
               );
             })()}
