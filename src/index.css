@@ -143,25 +143,19 @@
   }
 
   html {
-    font-family: 'Noto Sans Bengali', 'Hind Siliguri', 'Inter', system-ui, sans-serif;
+    font-family: 'BnOne', 'Hind Siliguri', 'Inter', system-ui, sans-serif;
     font-variant-numeric: normal;
     font-feature-settings: normal;
   }
 
-  /* Global: force Noto Sans Bengali everywhere so every Bangla digit (০-৯)
-     and Bangla character renders from Noto, regardless of component-level
-     font-sans / font-mono / inline font overrides. */
-  *,
-  *::before,
-  *::after,
-  svg text,
-  tspan {
-    font-family: 'Noto Sans Bengali', 'Hind Siliguri', 'Inter', system-ui, sans-serif !important;
-  }
-
-  /* Allow explicit English-only opt-out (e.g., code blocks, brand text). */
-  .font-en, :lang(en).font-en, code, pre, kbd, samp {
-    font-family: 'Inter', 'Noto Sans Bengali', ui-monospace, monospace !important;
+  /* Use Noto Sans Bengali ONLY for the digit ১ (U+09E7) — everything else
+     (text + other digits ০ ২-৯) keeps the original Hind Siliguri rendering. */
+  @font-face {
+    font-family: 'BnOne';
+    src: local('Noto Sans Bengali'), local('NotoSansBengali-Regular');
+    font-weight: 100 900;
+    font-style: normal;
+    unicode-range: U+09E7;
   }
 
   body {
