@@ -56,14 +56,55 @@ Deno.serve(async (req) => {
       });
     }
 
-    const { data: routines, error: rerr } = await supabase
-      .from("routines")
-      .select("name,category,scheduled_time,end_time,scheduled_date,completed,priority")
-      .gte("scheduled_date", startDate)
-      .lte("scheduled_date", endDate);
+    const today = new Date();
+    const todayStr = today.toISOString().slice(0, 10);
+    const upperStr = endDate < todayStr ? endDate : todayStr;
 
-    if (rerr) throw rerr;
-    const list = (routines ?? []) as Routine[];
+    const [{ data: tplData, error: tplErr }, { data: cmpData, error: cmpErr }] = await Promise.all([
+      supabase
+        .from("routine_templates")
+        .select("id,name,category,start_time,end_time,priority,effective_from,archived_at")
+        .lte("effective_from", upperStr),
+      supabase
+        .from("routine_completions")
+        .select("template_id,completion_date,completed,skipped")
+        .gte("completion_date", startDate)
+        .lte("completion_date", upperStr),
+    ]);
+    if (tplErr) throw tplErr;
+    if (cmpErr) throw cmpErr;
+
+    const templates = (tplData ?? []) as Array<{
+      id: string; name: string; category: string | null;
+      start_time: string | null; end_time: string | null;
+      priority: string; effective_from: string; archived_at: string | null;
+    }>;
+    const cmpMap = new Map<string, { completed: boolean; skipped: boolean }>();
+    for (const c of (cmpData ?? []) as Array<{ template_id: string; completion_date: string; completed: boolean; skipped: boolean }>) {
+      cmpMap.set(`${c.template_id}|${c.completion_date}`, c);
+    }
+    const list: Routine[] = [];
+    const cur = new Date(startDate);
+    const upper = new Date(upperStr);
+    while (cur <= upper) {
+      const ds = cur.toISOString().slice(0, 10);
+      for (const t of templates) {
+        if (ds < t.effective_from) continue;
+        if (t.archived_at && ds > t.archived_at.slice(0, 10)) continue;
+        const c = cmpMap.get(`${t.id}|${ds}`);
+        if (c?.skipped) continue;
+        list.push({
+          name: t.name,
+          category: t.category,
+          scheduled_time: t.start_time,
+          end_time: t.end_time,
+          scheduled_date: ds,
+          completed: !!c?.completed,
+          priority: t.priority,
+        });
+      }
+      cur.setDate(cur.getDate() + 1);
+    }
 
     if (list.length < 3) {
       return new Response(
