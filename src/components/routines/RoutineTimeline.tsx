@@ -315,12 +315,12 @@ export const RoutineTimeline = ({ routines, date, onToggle, onEdit, onDelete, on
                       </div>
                     </div>
 
-                    {!compact && height >= 60 && (
+                    {!compact && (
                       <div
-                        className="absolute right-1 top-1 flex gap-0.5 opacity-60 transition-smooth group-hover:opacity-100"
+                        className="absolute right-1 top-1 flex gap-0.5 opacity-90 md:opacity-60 transition-smooth group-hover:opacity-100"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        {onSkip && !item.routine.completed && (
+                        {onSkip && !item.routine.completed && height >= 60 && (
                           <Button
                             variant="ghost"
                             size="icon"
@@ -332,7 +332,7 @@ export const RoutineTimeline = ({ routines, date, onToggle, onEdit, onDelete, on
                             <SkipForward className="h-3 w-3" />
                           </Button>
                         )}
-                        {!isPrayer && (
+                        {!isPrayer && height >= 60 && (
                           <Button
                           variant="ghost"
                           size="icon"
@@ -347,23 +347,23 @@ export const RoutineTimeline = ({ routines, date, onToggle, onEdit, onDelete, on
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="press h-6 w-6 rounded-md bg-card/60 backdrop-blur-sm text-accent"
+                            className="press h-5 w-5 md:h-6 md:w-6 rounded-md bg-card/70 backdrop-blur-sm text-accent"
                             onClick={() => toast.info("নামায পেজ থেকে নিয়ন্ত্রণ করুন")}
                             aria-label="Locked"
                             title="নামায পেজ থেকে এডিট/ডিলিট করুন"
                           >
-                            <Lock className="h-3 w-3" />
+                            <Lock className="h-2.5 w-2.5 md:h-3 md:w-3" />
                           </Button>
                         ) : (
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="press h-6 w-6 rounded-md bg-card/70 backdrop-blur-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-200"
+                            className="press h-5 w-5 md:h-6 md:w-6 rounded-md bg-card/80 backdrop-blur-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-200"
                             onClick={() => onDelete(item.routine)}
                             aria-label="Delete"
                             title="রুটিনটি মুছুন"
                           >
-                            <Trash2 className="h-3 w-3" />
+                            <Trash2 className="h-2.5 w-2.5 md:h-3 md:w-3" />
                           </Button>
                         )}
                       </div>
