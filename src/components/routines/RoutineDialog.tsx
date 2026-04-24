@@ -19,6 +19,7 @@ export interface RoutineFormData {
   name: string;
   description?: string | null;
   scheduled_time?: string | null;
+  end_time?: string | null;
   priority: "low" | "medium" | "high";
   category?: string | null;
   scheduled_date: string;
@@ -28,10 +29,17 @@ const schema = z.object({
   name: z.string().trim().min(1, "নাম দিন").max(120),
   description: z.string().trim().max(500).optional(),
   scheduled_time: z.string().optional(),
+  end_time: z.string().optional(),
   priority: z.enum(["low", "medium", "high"]),
   category: z.string().trim().max(40).optional(),
   scheduled_date: z.string().min(1),
-});
+}).refine(
+  (v) => {
+    if (v.scheduled_time && v.end_time) return v.end_time > v.scheduled_time;
+    return true;
+  },
+  { message: "শেষের সময় শুরুর সময়ের পরে হতে হবে", path: ["end_time"] },
+);
 
 const CATEGORIES = ["কাজ", "পড়াশোনা", "স্বাস্থ্য", "ব্যক্তিগত", "পরিবার", "অন্যান্য"];
 
@@ -50,6 +58,7 @@ export const RoutineDialog = ({ open, onOpenChange, initial, defaultDate, onSave
     name: "",
     description: "",
     scheduled_time: "",
+    end_time: "",
     priority: "medium",
     category: "",
     scheduled_date: toLocalDateStr(defaultDate ?? new Date()),
@@ -62,6 +71,7 @@ export const RoutineDialog = ({ open, onOpenChange, initial, defaultDate, onSave
           name: "",
           description: "",
           scheduled_time: "",
+          end_time: "",
           priority: "medium",
           category: "",
           scheduled_date: toLocalDateStr(defaultDate ?? new Date()),
@@ -83,6 +93,7 @@ export const RoutineDialog = ({ open, onOpenChange, initial, defaultDate, onSave
       name: parsed.data.name,
       description: parsed.data.description || null,
       scheduled_time: parsed.data.scheduled_time || null,
+      end_time: parsed.data.end_time || null,
       priority: parsed.data.priority,
       category: parsed.data.category || null,
       scheduled_date: parsed.data.scheduled_date,
@@ -131,18 +142,7 @@ export const RoutineDialog = ({ open, onOpenChange, initial, defaultDate, onSave
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="r-time">সময়</Label>
-              <BanglaTimePicker
-                id="r-time"
-                value={form.scheduled_time ?? ""}
-                onChange={(v) => setForm({ ...form, scheduled_time: v || null })}
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label>অগ্রাধিকার</Label>
+              <Label>প্রায়োরিটি</Label>
               <Select value={form.priority} onValueChange={(v) => setForm({ ...form, priority: v as "low" | "medium" | "high" })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -152,15 +152,35 @@ export const RoutineDialog = ({ open, onOpenChange, initial, defaultDate, onSave
                 </SelectContent>
               </Select>
             </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label>ক্যাটাগরি</Label>
-              <Select value={form.category ?? ""} onValueChange={(v) => setForm({ ...form, category: v })}>
-                <SelectTrigger><SelectValue placeholder="বাছাই করুন" /></SelectTrigger>
-                <SelectContent>
-                  {CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                </SelectContent>
-              </Select>
+              <Label htmlFor="r-time-start">শুরু</Label>
+              <BanglaTimePicker
+                id="r-time-start"
+                value={form.scheduled_time ?? ""}
+                onChange={(v) => setForm({ ...form, scheduled_time: v || null })}
+              />
             </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="r-time-end">শেষ</Label>
+              <BanglaTimePicker
+                id="r-time-end"
+                value={form.end_time ?? ""}
+                onChange={(v) => setForm({ ...form, end_time: v || null })}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <Label>ক্যাটাগরি</Label>
+            <Select value={form.category ?? ""} onValueChange={(v) => setForm({ ...form, category: v })}>
+              <SelectTrigger><SelectValue placeholder="বাছাই করুন" /></SelectTrigger>
+              <SelectContent>
+                {CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 

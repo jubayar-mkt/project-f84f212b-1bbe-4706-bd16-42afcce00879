@@ -10,6 +10,7 @@ export interface Routine {
   name: string;
   description: string | null;
   scheduled_time: string | null;
+  end_time: string | null;
   priority: "low" | "medium" | "high";
   category: string | null;
   scheduled_date: string;
