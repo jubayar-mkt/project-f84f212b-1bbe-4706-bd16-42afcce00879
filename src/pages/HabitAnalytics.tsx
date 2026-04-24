@@ -70,7 +70,7 @@ const HabitAnalytics = () => {
   // Build last-30-days trend (sum of check-ins)
   const trendData = useMemo(() => {
     const map = new Map<string, number>();
-    for (let i = RANGE_DAYS - 1; i >= 0; i--) {
+    for (let i = rangeDays - 1; i >= 0; i--) {
       const d = new Date();
       d.setDate(d.getDate() - i);
       map.set(toLocalDateStr(d), 0);
@@ -86,7 +86,7 @@ const HabitAnalytics = () => {
         total,
       };
     });
-  }, [checkins]);
+  }, [checkins, rangeDays]);
 
   // Per-habit aggregates
   const perHabit = useMemo(() => {
@@ -96,7 +96,7 @@ const HabitAnalytics = () => {
       const totalCheckins = checkins.filter((c) => c.habit_id === h.id).reduce((s, c) => s + c.count, 0);
       const created = new Date(h.created_at);
       const today = new Date();
-      const ageDays = Math.max(1, Math.min(RANGE_DAYS, Math.round((today.getTime() - created.getTime()) / 86400000) + 1));
+      const ageDays = Math.max(1, Math.min(rangeDays, Math.round((today.getTime() - created.getTime()) / 86400000) + 1));
       const completionRate = Math.round((uniqueDates.length / ageDays) * 100);
       const current = calcStreak(uniqueDates.sort().reverse());
       const longest = calcLongestStreak(uniqueDates);
@@ -109,7 +109,7 @@ const HabitAnalytics = () => {
         longestStreak: longest,
       };
     });
-  }, [habits, checkins]);
+  }, [habits, checkins, rangeDays]);
 
   const ranked = useMemo(() => [...perHabit].sort((a, b) => b.completionRate - a.completionRate), [perHabit]);
   const best = ranked.slice(0, 3);
