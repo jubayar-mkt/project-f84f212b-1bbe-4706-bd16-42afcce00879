@@ -14,6 +14,8 @@ import Finance from "./pages/Finance.tsx";
 import RoutineAnalytics from "./pages/RoutineAnalytics.tsx";
 import ShopCredit from "./pages/ShopCredit.tsx";
 import Namaz from "./pages/Namaz.tsx";
+import Achievements from "./pages/Achievements.tsx";
+import Settings from "./pages/Settings.tsx";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
@@ -92,6 +94,22 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <Namaz />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/achievements"
+                element={
+                  <ProtectedRoute>
+                    <Achievements />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/settings"
+                element={
+                  <ProtectedRoute>
+                    <Settings />
                   </ProtectedRoute>
                 }
               />
