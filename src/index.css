@@ -153,19 +153,20 @@
      the digit ১. All other characters fall through to Hind Siliguri unchanged. */
   @font-face {
     font-family: 'BnOne';
-    src: local('Noto Sans Bengali'),
-         local('NotoSansBengali-Regular'),
-         local('Noto Sans Bengali Regular');
-    font-weight: 400;
     font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('Noto Sans Bengali'),
+         url(https://fonts.gstatic.com/s/notosansbengali/v33/Cn-SJsCGWQxOjaGwMQ6fIiMywrNJIky6nvd8BjzVMvJx2mcSPVFpVEqE-6KmsolLudA.ttf) format('truetype');
     unicode-range: U+09E7;
   }
   @font-face {
     font-family: 'BnOne';
-    src: local('Noto Sans Bengali Bold'),
-         local('NotoSansBengali-Bold');
-    font-weight: 700;
     font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: local('Noto Sans Bengali'),
+         url(https://fonts.gstatic.com/s/notosansbengali/v33/Cn-SJsCGWQxOjaGwMQ6fIiMywrNJIky6nvd8BjzVMvJx2mcSPVFpVEqE-6Kmsm5MudA.ttf) format('truetype');
     unicode-range: U+09E7;
   }
 
