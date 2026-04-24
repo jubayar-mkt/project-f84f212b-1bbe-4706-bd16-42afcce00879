@@ -156,10 +156,31 @@ const HabitAnalytics = () => {
   return (
     <AppLayout>
       <div className="mx-auto max-w-7xl space-y-8">
-        <div className="space-y-1">
-          <p className="text-sm text-muted-foreground">বিশ্লেষণ</p>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">অভ্যাস অ্যানালিটিক্স</h1>
-          <p className="text-sm text-muted-foreground">গত ৩০ দিনের কার্যক্রম, সেরা ও দুর্বল অভ্যাস এবং স্ট্রিক বিশ্লেষণ</p>
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div className="space-y-1">
+            <p className="text-sm text-muted-foreground">বিশ্লেষণ</p>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight">অভ্যাস অ্যানালিটিক্স</h1>
+            <p className="text-sm text-muted-foreground">
+              গত {toBn(rangeDays)} দিনের কার্যক্রম, সেরা ও দুর্বল অভ্যাস এবং স্ট্রিক বিশ্লেষণ
+            </p>
+          </div>
+          <ToggleGroup
+            type="single"
+            value={String(rangeDays)}
+            onValueChange={(v) => v && setRangeDays(Number(v) as RangeDays)}
+            className="self-start rounded-lg border border-border/60 bg-card p-1 shadow-soft"
+          >
+            {RANGE_OPTIONS.map((opt) => (
+              <ToggleGroupItem
+                key={opt.value}
+                value={String(opt.value)}
+                aria-label={opt.label}
+                className="rounded-md px-3 py-1.5 text-xs font-medium data-[state=on]:bg-accent data-[state=on]:text-accent-foreground data-[state=on]:shadow-soft"
+              >
+                {opt.label}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
         </div>
 
         {loading ? (
@@ -171,7 +192,7 @@ const HabitAnalytics = () => {
         ) : (
           <>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <StatCard label="মোট চেক-ইন" value={toBn(totals.totalCheckins)} hint="গত ৩০ দিন" icon={CalendarCheck} accent="accent" />
+              <StatCard label="মোট চেক-ইন" value={toBn(totals.totalCheckins)} hint={`গত ${toBn(rangeDays)} দিন`} icon={CalendarCheck} accent="accent" />
               <StatCard label="সক্রিয় অভ্যাস" value={toBn(totals.activeHabits)} hint="চলমান" icon={Activity} accent="primary" />
               <StatCard label="গড় সম্পন্নতা" value={`${toBn(totals.avgCompletion)}%`} hint="সব অভ্যাস" icon={TrendingUp} accent="success" />
               <StatCard label="দীর্ঘতম স্ট্রিক" value={`${toBn(totals.topStreak)} দিন`} hint="🔥 রেকর্ড" icon={Flame} accent="warning" />
