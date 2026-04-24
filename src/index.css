@@ -143,25 +143,31 @@
   }
 
   html {
-    font-family: 'Noto Sans Bengali', 'Hind Siliguri', 'Inter', system-ui, sans-serif;
+    font-family: 'BnOne', 'Hind Siliguri', 'Inter', system-ui, sans-serif;
     font-variant-numeric: normal;
     font-feature-settings: normal;
   }
 
-  /* Global: force Noto Sans Bengali everywhere so every Bangla digit (০-৯)
-     and Bangla character renders from Noto, regardless of component-level
-     font-sans / font-mono / inline font overrides. */
-  *,
-  *::before,
-  *::after,
-  svg text,
-  tspan {
-    font-family: 'Noto Sans Bengali', 'Hind Siliguri', 'Inter', system-ui, sans-serif !important;
+  /* The actual Noto Sans Bengali webfont (loaded from Google Fonts in index.html)
+     is re-declared here as 'BnOne' with unicode-range U+09E7 so it ONLY supplies
+     the digit ১. All other characters fall through to Hind Siliguri unchanged. */
+  @font-face {
+    font-family: 'BnOne';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('Noto Sans Bengali'),
+         url(https://fonts.gstatic.com/s/notosansbengali/v33/Cn-SJsCGWQxOjaGwMQ6fIiMywrNJIky6nvd8BjzVMvJx2mcSPVFpVEqE-6KmsolLudA.ttf) format('truetype');
+    unicode-range: U+09E7;
   }
-
-  /* Allow explicit English-only opt-out (e.g., code blocks, brand text). */
-  .font-en, :lang(en).font-en, code, pre, kbd, samp {
-    font-family: 'Inter', 'Noto Sans Bengali', ui-monospace, monospace !important;
+  @font-face {
+    font-family: 'BnOne';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: local('Noto Sans Bengali'),
+         url(https://fonts.gstatic.com/s/notosansbengali/v33/Cn-SJsCGWQxOjaGwMQ6fIiMywrNJIky6nvd8BjzVMvJx2mcSPVFpVEqE-6Kmsm5MudA.ttf) format('truetype');
+    unicode-range: U+09E7;
   }
 
   body {
@@ -172,28 +178,6 @@
 
   :lang(en), .font-en {
     font-family: 'Inter', 'Hind Siliguri', system-ui, sans-serif;
-  }
-}
-
-@layer components {
-  /* Dashboard-scoped: force Noto Sans Bengali on every element so বাংলা ডিজিট
-     (especially ১) renders consistently across cards, stats, charts, labels & SVG text.
-     Keeps weight/size/layout untouched — only swaps the font family. */
-  [data-dashboard="true"],
-  [data-dashboard="true"] *,
-  [data-dashboard="true"] svg text,
-  [data-dashboard="true"] tspan {
-    font-family: 'Noto Sans Bengali', 'Hind Siliguri', 'Inter', system-ui, sans-serif !important;
-    font-feature-settings: normal;
-    font-variant-numeric: normal;
-    font-variant-ligatures: normal;
-  }
-
-  /* Preserve icon fonts (lucide etc. use SVG, not text — safe).
-     Allow explicit English font opt-out inside dashboard if needed. */
-  [data-dashboard="true"] .font-en,
-  [data-dashboard="true"] :lang(en) {
-    font-family: 'Inter', 'Noto Sans Bengali', system-ui, sans-serif !important;
   }
 }
 
