@@ -121,6 +121,57 @@ export type Database = {
         }
         Relationships: []
       }
+      prayer_settings: {
+        Row: {
+          asr_reminder: boolean
+          asr_time: string | null
+          created_at: string
+          dhuhr_reminder: boolean
+          dhuhr_time: string | null
+          fajr_reminder: boolean
+          fajr_time: string | null
+          id: string
+          isha_reminder: boolean
+          isha_time: string | null
+          maghrib_reminder: boolean
+          maghrib_time: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          asr_reminder?: boolean
+          asr_time?: string | null
+          created_at?: string
+          dhuhr_reminder?: boolean
+          dhuhr_time?: string | null
+          fajr_reminder?: boolean
+          fajr_time?: string | null
+          id?: string
+          isha_reminder?: boolean
+          isha_time?: string | null
+          maghrib_reminder?: boolean
+          maghrib_time?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          asr_reminder?: boolean
+          asr_time?: string | null
+          created_at?: string
+          dhuhr_reminder?: boolean
+          dhuhr_time?: string | null
+          fajr_reminder?: boolean
+          fajr_time?: string | null
+          id?: string
+          isha_reminder?: boolean
+          isha_time?: string | null
+          maghrib_reminder?: boolean
+          maghrib_time?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -200,8 +251,10 @@ export type Database = {
           end_time: string | null
           id: string
           name: string
+          prayer_key: Database["public"]["Enums"]["prayer_key"] | null
           priority: Database["public"]["Enums"]["routine_priority"]
           sort_order: number
+          source: Database["public"]["Enums"]["routine_source"]
           start_time: string | null
           updated_at: string
           user_id: string
@@ -216,8 +269,10 @@ export type Database = {
           end_time?: string | null
           id?: string
           name: string
+          prayer_key?: Database["public"]["Enums"]["prayer_key"] | null
           priority?: Database["public"]["Enums"]["routine_priority"]
           sort_order?: number
+          source?: Database["public"]["Enums"]["routine_source"]
           start_time?: string | null
           updated_at?: string
           user_id: string
@@ -232,8 +287,10 @@ export type Database = {
           end_time?: string | null
           id?: string
           name?: string
+          prayer_key?: Database["public"]["Enums"]["prayer_key"] | null
           priority?: Database["public"]["Enums"]["routine_priority"]
           sort_order?: number
+          source?: Database["public"]["Enums"]["routine_source"]
           start_time?: string | null
           updated_at?: string
           user_id?: string
@@ -441,7 +498,9 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "premium" | "user"
+      prayer_key: "fajr" | "dhuhr" | "asr" | "maghrib" | "isha"
       routine_priority: "low" | "medium" | "high"
+      routine_source: "manual" | "prayer"
       transaction_type: "income" | "expense"
     }
     CompositeTypes: {
@@ -571,7 +630,9 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "premium", "user"],
+      prayer_key: ["fajr", "dhuhr", "asr", "maghrib", "isha"],
       routine_priority: ["low", "medium", "high"],
+      routine_source: ["manual", "prayer"],
       transaction_type: ["income", "expense"],
     },
   },
