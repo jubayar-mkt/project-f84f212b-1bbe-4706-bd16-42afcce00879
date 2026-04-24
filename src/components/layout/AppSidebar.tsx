@@ -1,4 +1,4 @@
-import { LayoutDashboard, ListTodo, Sparkles, Wallet, Trophy, Settings, BarChart3, Activity, Store, Moon } from "lucide-react";
+import { LayoutDashboard, ListTodo, Sparkles, Wallet, Trophy, Settings, BarChart3, Activity, Store, Moon, PiggyBank } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -22,6 +22,7 @@ const mainItems = [
   { title: "অভ্যাস", url: "/habits", icon: Sparkles },
   { title: "অভ্যাস বিশ্লেষণ", url: "/analytics", icon: BarChart3 },
   { title: "অর্থ", url: "/finance", icon: Wallet },
+  { title: "সঞ্চয়", url: "/savings", icon: PiggyBank },
   { title: "বকেয়া হিসেব", url: "/shop-credit", icon: Store },
 ];
 
