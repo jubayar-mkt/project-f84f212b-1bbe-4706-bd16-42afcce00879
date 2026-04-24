@@ -117,6 +117,10 @@ export const syncPrayerRoutine = async (
     source: "prayer" as const,
     prayer_key: key,
     active: true,
+    // Count this prayer in routines from today onwards only.
+    // For new inserts and time updates, reset effective_from to today
+    // so past dates are not retroactively marked as missed.
+    effective_from: new Date().toLocaleDateString("en-CA"), // YYYY-MM-DD in local tz
   };
 
   if (existing) {
