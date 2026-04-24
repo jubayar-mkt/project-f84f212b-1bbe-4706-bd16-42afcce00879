@@ -23,6 +23,8 @@ interface Template {
   priority: "low" | "medium" | "high";
   active: boolean;
   effective_from: string;
+  source: "manual" | "prayer";
+  prayer_key: "fajr" | "dhuhr" | "asr" | "maghrib" | "isha" | null;
 }
 
 interface Completion {
@@ -51,7 +53,7 @@ const Routines = () => {
     const [tplRes, compRes] = await Promise.all([
       supabase
         .from("routine_templates")
-        .select("id,name,description,start_time,end_time,category,priority,active,effective_from")
+        .select("id,name,description,start_time,end_time,category,priority,active,effective_from,source,prayer_key")
         .eq("user_id", user.id)
         .is("archived_at", null)
         .lte("effective_from", dateStr)
@@ -97,6 +99,8 @@ const Routines = () => {
       category: t.category,
       completed: !!c?.completed,
       skipped: !!c?.skipped,
+      source: t.source,
+      prayer_key: t.prayer_key,
     };
   }), [templates, completions]);
 
@@ -126,6 +130,11 @@ const Routines = () => {
 
   const handleDelete = async () => {
     if (!deleting) return;
+    if (deleting.source === "prayer") {
+      toast.error("নামাযের রুটিন এখান থেকে মুছা যাবে না — নামায পেজ থেকে নিয়ন্ত্রণ করুন");
+      setDeleting(null);
+      return;
+    }
     // Soft-delete: archive so completion history stays for analytics
     const { error } = await supabase
       .from("routine_templates")
