@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { toLocalDateStr } from "@/lib/bangla";
+import { BanglaDatePicker } from "@/components/ui/bangla-date-picker";
 
 export interface RoutineFormData {
   id?: string;
@@ -122,7 +123,11 @@ export const RoutineDialog = ({ open, onOpenChange, initial, defaultDate, onSave
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label htmlFor="r-date">তারিখ</Label>
-              <Input id="r-date" type="date" value={form.scheduled_date} onChange={(e) => setForm({ ...form, scheduled_date: e.target.value })} />
+              <BanglaDatePicker
+                id="r-date"
+                value={form.scheduled_date}
+                onChange={(v) => setForm({ ...form, scheduled_date: v || toLocalDateStr(new Date()) })}
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="r-time">সময়</Label>
