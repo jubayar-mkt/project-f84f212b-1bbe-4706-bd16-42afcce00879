@@ -100,8 +100,6 @@ const Auth = () => {
     if (result.redirected) return;
     navigate("/dashboard");
   };
-    }
-  };
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-hero">
