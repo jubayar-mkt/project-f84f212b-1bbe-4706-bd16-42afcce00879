@@ -34,7 +34,7 @@ const Index = () => {
           </Link>
           {!user && (
             <Link to="/auth">
-              <Button className="press bg-gradient-primary text-primary-foreground hover:opacity-90">
+              <Button className="press bg-gradient-accent text-accent-foreground hover:opacity-90">
                 শুরু করুন
               </Button>
             </Link>
