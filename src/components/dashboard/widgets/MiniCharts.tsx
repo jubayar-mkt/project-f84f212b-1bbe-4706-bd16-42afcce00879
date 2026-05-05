@@ -14,8 +14,8 @@ interface MiniProps {
   title: string; subtitle: string; icon: any; to: string; gradient: string; loading: boolean; children: React.ReactNode; metric?: string;
 }
 const MiniCard = ({ title, subtitle, icon: Icon, to, gradient, loading, children, metric }: MiniProps) => (
-  <Link to={to} className="group block">
-    <Card className="relative h-full overflow-hidden p-5 shadow-soft glass transition-spring hover:-translate-y-0.5 hover:shadow-elevated">
+  <div className="group block">
+    <Card className="relative h-full overflow-hidden p-5 shadow-soft glass transition-spring hover:shadow-elevated">
       <div className={`absolute -right-8 -top-8 h-28 w-28 rounded-full ${gradient} opacity-20 blur-2xl group-hover:opacity-30 transition-opacity`} />
       <div className="relative space-y-3">
         <div className="flex items-center justify-between">
@@ -28,7 +28,13 @@ const MiniCard = ({ title, subtitle, icon: Icon, to, gradient, loading, children
               <p className="text-[11px] text-muted-foreground font-medium">{subtitle}</p>
             </div>
           </div>
-          <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/80 transition-transform group-hover:translate-x-1 group-hover:text-foreground" />
+          <Link
+            to={to}
+            aria-label={`${title} বিশ্লেষণে যান`}
+            className="press flex h-7 w-7 items-center justify-center rounded-lg border border-border/60 bg-background/60 text-muted-foreground transition-smooth hover:border-accent/50 hover:bg-accent/10 hover:text-accent"
+          >
+            <ArrowRight className="h-3.5 w-3.5 transition-transform hover:translate-x-0.5" />
+          </Link>
         </div>
         {metric && <p className="font-en text-xl font-bold tracking-tight">{metric}</p>}
         <div className="h-16">
@@ -36,7 +42,7 @@ const MiniCard = ({ title, subtitle, icon: Icon, to, gradient, loading, children
         </div>
       </div>
     </Card>
-  </Link>
+  </div>
 );
 
 const tooltipStyle = {
