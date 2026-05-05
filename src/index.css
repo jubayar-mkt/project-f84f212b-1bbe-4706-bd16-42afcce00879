@@ -113,7 +113,7 @@
     --input: 222 30% 14%;
     --ring: 160 65% 50%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(222 47% 14%), hsl(222 60% 25%));
+    --gradient-primary: linear-gradient(135deg, hsl(210 40% 96%), hsl(222 70% 75%));
     --gradient-accent: linear-gradient(135deg, hsl(160 65% 50%), hsl(170 70% 55%));
     --gradient-hero: linear-gradient(135deg, hsl(222 47% 6%) 0%, hsl(222 40% 10%) 50%, hsl(160 30% 8%) 100%);
     --gradient-glow: radial-gradient(circle at 50% 0%, hsl(160 65% 50% / 0.2), transparent 60%);
