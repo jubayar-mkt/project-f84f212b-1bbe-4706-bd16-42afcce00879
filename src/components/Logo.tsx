@@ -2,9 +2,8 @@ import { Sparkles } from "lucide-react";
 
 export const Logo = ({ collapsed = false }: { collapsed?: boolean }) => (
   <div className="flex items-center gap-2.5">
-    <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-primary shadow-glow">
-      <Sparkles className="h-4 w-4 text-primary-foreground" />
-      <div className="absolute inset-0 rounded-xl bg-gradient-accent opacity-0 hover:opacity-100 transition-smooth" />
+    <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-accent shadow-glow">
+      <Sparkles className="h-4 w-4 text-accent-foreground" />
     </div>
     {!collapsed && (
       <div className="flex flex-col leading-none">
